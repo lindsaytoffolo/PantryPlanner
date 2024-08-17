@@ -284,20 +284,20 @@
 
 
 
-// export async function GET() {
-//     try {
-//         await client.sql`BEGIN`;
-//         await seedUsers();
-//         const recipeIds = await seedRecipes();
-//         await seedIngredients(recipeIds);
-//         await seedInstructions(recipeIds);
-//         const groceryListIds = await seedGroceryLists();
-//         await seedGroceryItems(groceryListIds);
-//         await client.sql`COMMIT`;
+export async function GET() {
+    //     try {
+    //         await client.sql`BEGIN`;
+    //         await seedUsers();
+    //         const recipeIds = await seedRecipes();
+    //         await seedIngredients(recipeIds);
+    //         await seedInstructions(recipeIds);
+    //         const groceryListIds = await seedGroceryLists();
+    //         await seedGroceryItems(groceryListIds);
+    //         await client.sql`COMMIT`;
 
-//         return Response.json({ message: 'Database seeded successfully' });
-//     } catch (error) {
-//         await client.sql`ROLLBACK`;
-//         return Response.json({ error }, { status: 500 });
-//     }
-// }
+    //         return Response.json({ message: 'Database seeded successfully' });
+    //     } catch (error) {
+    //         await client.sql`ROLLBACK`;
+    //         return Response.json({ error }, { status: 500 });
+    //     }
+}
