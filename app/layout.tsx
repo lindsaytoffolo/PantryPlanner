@@ -5,26 +5,18 @@ import SideNav from "@/app/ui/dashboard/sidenav";
 
 export const metadata: Metadata = {
     title: {
-        template: "%s | Recipe Book",
-        default: "Recipe Book",
+        template: "%s | PantryPlanner",
+        default: "PantryPlanner",
     },
-    description: "A Recipe Book playground app to learn Next.js",
+    description:
+        "PantryPlanner is an app that helps you manage both your recipe book and your grocery list to make meal planning easier",
     metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
 };
-
-export const experimental_ppr = true;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en">
-            <body className={`${defaultFont.className} antialiased`}>
-                <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-                    <div className="w-full flex-none md:w-72">
-                        <SideNav />
-                    </div>
-                    <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
-                </div>
-            </body>
+            <body className={`${defaultFont.className} antialiased`}>{children}</body>
         </html>
     );
 }
