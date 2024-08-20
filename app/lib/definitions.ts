@@ -2,12 +2,70 @@
 // It describes the shape of the data, and what data type each property should accept.
 // For simplicity of teaching, we're manually defining these types.
 // However, these types are generated automatically if you're using an ORM such as Prisma.
-export type User = {
-  id: string;
+// Types for Users Table
+export interface User {
+  id: string; // UUID
   name: string;
   email: string;
   password: string;
-};
+  created_at?: Date; // Timestamp with Time Zone, optional if not provided
+}
+
+// Types for Recipes Table
+export interface Recipe {
+  id: string; // UUID
+  user_id: string; // UUID (Foreign Key to users.id)
+  title: string;
+  image?: string; // Optional field
+  description?: string; // Optional field
+  servings?: number; // Optional field
+  prep_time_hours?: number; // Optional field
+  prep_time_minutes?: number; // Optional field
+  cook_time_hours?: number; // Optional field
+  cook_time_minutes?: number; // Optional field
+  created_at?: Date; // Timestamp with Time Zone, optional if not provided
+}
+
+// Types for Ingredients Table
+export interface Ingredient {
+  id: string; // UUID
+  recipe_id: string; // UUID (Foreign Key to recipes.id)
+  name: string;
+  quantity?: string; // Optional field
+  modifier?: string; // Optional field
+  created_at?: Date; // Timestamp with Time Zone, optional if not provided
+}
+
+// Types for Instructions Table
+export interface Instruction {
+  id: string; // UUID
+  recipe_id: string; // UUID (Foreign Key to recipes.id)
+  step_number: number;
+  instruction: string;
+  created_at?: Date; // Timestamp with Time Zone, optional if not provided
+}
+
+// Types for Grocery Lists Table
+export interface GroceryList {
+  id: string; // UUID
+  user_id: string; // UUID (Foreign Key to users.id)
+  name: string;
+  created_at?: Date; // Timestamp with Time Zone, optional if not provided
+}
+
+// Types for Grocery Items Table
+export interface GroceryItem {
+  id?: string; // UUID
+  grocery_list_id?: string; // UUID (Foreign Key to grocery_lists.id)
+  name: string;
+  quantity?: string; // Optional field
+  checked?: boolean; // Optional field
+  image?: string;
+  sort_order?: number;
+  comment?: string;
+  created_at?: Date; // Timestamp with Time Zone, optional if not provided
+}
+
 
 export type Customer = {
   id: string;

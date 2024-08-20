@@ -1,13 +1,42 @@
+'use server';
+
 import { sql } from '@vercel/postgres';
 import {
   CustomerField,
   CustomersTableType,
+  GroceryItem,
+  GroceryList,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
+import { auth } from '@/auth';
+
+export async function fetchGroceryLists() {
+  const session = await auth()
+  const userId = session?.user?.id
+  if (!userId) throw new Error("Unauthenticated user trying to access grocery list page")
+
+  try {
+    const data = await sql<GroceryList>`SELECT * FROM grocery_lists WHERE user_id = ${userId}`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch grocery lists.');
+  }
+}
+
+export async function fetchGroceryItems(groceryListId: string) {
+  try {
+    const data = await sql<GroceryItem>`SELECT * FROM grocery_items WHERE grocery_list_id = ${groceryListId} ORDER BY sort_order ASC`;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch grocery items.');
+  }
+}
 
 export async function fetchRevenue() {
   try {

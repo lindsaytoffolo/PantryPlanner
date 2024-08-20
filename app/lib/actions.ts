@@ -6,7 +6,10 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { signIn } from '@/auth';
 import { AuthError } from 'next-auth';
-import { search } from './fatSecretApi';
+import { fetchFoodData } from './nutritionixApi';
+import { GroceryItem } from './definitions';
+
+const GROCERY_LIST_ID = '3157d662-b5e8-49d4-a49d-edb123248dbf'
 
 const FormSchema = z.object({
     id: z.string(),
@@ -22,8 +25,34 @@ const FormSchema = z.object({
     date: z.string(),
 });
 
+const GroceryItemSchema = z.object({
+    id: z.string(),
+    grocery_list_id: z.string(),
+    name: z.string(),
+    checked: z.boolean(),
+    image: z.string(),
+    created_at: z.string(),
+    quantity: z.string(),
+    comment: z.string(),
+});
+
+const UpdateGroceryItem = GroceryItemSchema.pick({ name: true })
+    .extend({
+        quantity: z.string().optional(),
+        comment: z.string().optional(),
+    });
+
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+
+export type GroceryItemFormState = {
+    errors?: {
+        quantity?: string[];
+        name?: string[];
+        comment?: string[];
+    };
+    message?: string | null;
+};
 
 export type State = {
     errors?: {
@@ -73,6 +102,28 @@ export async function createInvoice(prevState: State, formData: FormData) {
     redirect('/dashboard/invoices');
 }
 
+export async function createGroceryList() {
+    const name = 'Default Grocery List'
+    // Insert data into the database
+    try {
+        //     await sql`
+        //     INSERT INTO grocery_lists (user_id, name)
+        //     VALUES (${customerId}, ${name})
+        //   `;
+    } catch (error) {
+        // If a database error occurs, return a more specific error.
+        return {
+            message: 'Database Error: Failed to Create Grocery List.',
+        };
+    }
+
+    // Revalidate the cache for the invoices page and redirect the user.
+    revalidatePath('/dashboard/invoices');
+    redirect('/dashboard/invoices');
+}
+
+
+
 export async function updateInvoice(
     id: string,
     prevState: State,
@@ -118,6 +169,36 @@ export async function deleteInvoice(id: string) {
     }
 }
 
+export async function deleteGroceryItem(id: string) {
+    try {
+        await sql`DELETE FROM grocery_items WHERE id = ${id}`;
+        revalidatePath('/grocery-list');
+        return { message: 'Deleted Grocery Item.' };
+    } catch (error) {
+        return { message: 'Database Error: Failed to Delete Grocery Item.' };
+    }
+}
+
+export async function deleteGroceryList(id: string) {
+    try {
+        await sql`DELETE FROM grocery_lists WHERE id = ${id}`;
+        revalidatePath('/grocery-list');
+        return { message: 'Deleted Grocery List.' };
+    } catch (error) {
+        return { message: 'Database Error: Failed to Delete Grocery List.' };
+    }
+}
+
+export async function deleteRecipe(id: string) {
+    try {
+        await sql`DELETE FROM recipes WHERE id = ${id}`;
+        revalidatePath('/recipes');
+        return { message: 'Deleted Recipe.' };
+    } catch (error) {
+        return { message: 'Database Error: Failed to Delete Recipe.' };
+    }
+}
+
 export async function authenticate(
     prevState: string | undefined,
     formData: FormData,
@@ -137,16 +218,102 @@ export async function authenticate(
     }
 }
 
-export const performFoodSearch = async (query: string) => {
+export const nutritionixFoodSearch = async (query: string) => {
     try {
-        const result = await search(query);
-        console.log('Search results:', result);
+        const result = await fetchFoodData(query);
         return result;
     } catch (error) {
-        if (error instanceof Error) {
-            console.error('Error making API request:', error.message);
-        } else {
-            console.error('An unexpected error occurred:', error);
-        }
+        console.error('Error making API request:', error);
     }
 };
+
+export async function createGroceryItem(name: string, image?: string) {
+
+    try {
+        const r = await sql`
+            INSERT INTO grocery_items (grocery_list_id, name, image, checked)
+            VALUES (${GROCERY_LIST_ID}, ${name}, ${image}, ${false})
+        `;
+    } catch (error) {
+        return { message: 'Database Error: Failed to Create Grocery Item.' };
+    }
+
+    revalidatePath('/grocery-list');
+    redirect('/grocery-list');
+}
+
+export async function toggleGroceryItem(id: string, checked: boolean) {
+
+    try {
+        const r = await sql`
+            UPDATE grocery_items
+            SET checked = ${checked}
+            WHERE id = ${id}
+        `;
+    } catch (error) {
+        return { message: 'Database Error: Failed to Update Grocery Item.' };
+    }
+
+    revalidatePath('/grocery-list');
+    redirect('/grocery-list');
+}
+
+export async function updateGroceryListOrder(newItems: GroceryItem[]) {
+    try {
+        const caseStatements = newItems.flatMap((_, index) => [
+            `WHEN id = $${index + 1} THEN $${newItems.length + index + 1}`
+        ]).join(' ');
+
+        const query = `
+            UPDATE grocery_items
+            SET sort_order = CASE
+                ${caseStatements}
+                ELSE sort_order
+            END
+            WHERE id IN (${newItems.map((_, index) => `$${index + 1}`).join(', ')});
+        `;
+
+        const ids = newItems.map(item => item.id);
+        const orders = newItems.map(item => item.sort_order);
+        const r = await sql.query(query, [...ids, ...orders]);
+    } catch (error) {
+        return { message: 'Database Error: Failed to Update Grocery List.' };
+    }
+
+    revalidatePath('/grocery-list');
+    redirect('/grocery-list');
+}
+
+export async function updateGroceryItem(
+    id: string,
+    prevState: GroceryItemFormState,
+    formData: FormData,
+) {
+    const validatedFields = UpdateGroceryItem.safeParse({
+        quantity: formData.get('quantity'),
+        name: formData.get('name'),
+        comment: formData.get('comment'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Missing Fields. Failed to Update Grocery Item.',
+        };
+    }
+
+    const { quantity, name, comment } = validatedFields.data;
+
+    try {
+        await sql`
+            UPDATE grocery_items
+            SET quantity = ${quantity}, name = ${name}, comment = ${comment}
+            WHERE id = ${id}
+        `;
+    } catch (error) {
+        return { message: 'Database Error: Failed to Update Grocery Item.' };
+    }
+
+    revalidatePath('/grocery-list');
+    redirect('/grocery-list');
+}
