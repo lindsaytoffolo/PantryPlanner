@@ -13,7 +13,9 @@ export default function LoginForm() {
         <form action={formAction} className="space-y-3">
             <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
                 <h1 className="mb-3 text-2xl">Please log in to continue.</h1>
-                Please use the provided credentials to log in
+                <p className="text-violet-700 text-sm">
+                    Please use the provided credentials to log in
+                </p>
                 <div className="w-full">
                     <div>
                         <label
