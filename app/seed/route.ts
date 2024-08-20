@@ -19,7 +19,7 @@
 //             id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
 //             name VARCHAR(255) NOT NULL,
 //             email TEXT NOT NULL UNIQUE,
-//             password TEXT NOT NULL
+//             password TEXT NOT NULL,
 //             created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 //         );
 //     `;
@@ -98,7 +98,6 @@
 //         CREATE TABLE IF NOT EXISTS ingredients (
 //             id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
 //             recipe_id UUID REFERENCES recipes(id) ON DELETE CASCADE,
-//             fatsecret_id TEXT,
 //             name VARCHAR(255) NOT NULL,
 //             quantity VARCHAR(50),
 //             modifier TEXT,
