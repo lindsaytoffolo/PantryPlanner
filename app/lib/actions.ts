@@ -4,10 +4,12 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { signIn } from '@/auth';
+import { auth, signIn } from '@/auth';
 import { AuthError } from 'next-auth';
 import { fetchFoodData } from './nutritionixApi';
-import { GroceryItem } from './definitions';
+import { GroceryItem, Ingredient } from './definitions';
+import { put } from "@vercel/blob";
+
 
 const GROCERY_LIST_ID = '3157d662-b5e8-49d4-a49d-edb123248dbf'
 
@@ -28,7 +30,7 @@ const FormSchema = z.object({
 const GroceryItemSchema = z.object({
     id: z.string(),
     grocery_list_id: z.string(),
-    name: z.string(),
+    name: z.string().trim().min(1),
     checked: z.boolean(),
     image: z.string(),
     created_at: z.string(),
@@ -45,6 +47,15 @@ const UpdateGroceryItem = GroceryItemSchema.pick({ name: true })
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 
+export type State = {
+    errors?: {
+        customerId?: string[];
+        amount?: string[];
+        status?: string[];
+    };
+    message?: string | null;
+};
+
 export type GroceryItemFormState = {
     errors?: {
         quantity?: string[];
@@ -54,14 +65,90 @@ export type GroceryItemFormState = {
     message?: string | null;
 };
 
-export type State = {
+export type RecipeFormState = {
     errors?: {
-        customerId?: string[];
-        amount?: string[];
-        status?: string[];
+        title?: string[];
+        image?: string[];
+        description?: string[];
+        servings?: string[];
+        prep_time_hours?: string[];
+        prep_time_minutes?: string[];
+        cook_time_hours?: string[];
+        cook_time_minutes?: string[];
     };
     message?: string | null;
 };
+
+const RecipeSchema = z.object({
+    id: z.string(),
+    created_at: z.string(),
+    title: z.string().trim().min(1, { message: 'This field is required' }),
+    description: z.string().optional(),
+    servings: z.coerce.number().gt(0, { message: 'Please enter an amount greater than 0.' }),
+    prep_time_hours: z.coerce.number().optional(),
+    prep_time_minutes: z.coerce.number().optional(),
+    cook_time_hours: z.coerce.number().optional(),
+    cook_time_minutes: z.coerce.number().optional(),
+});
+
+const CreateRecipe = RecipeSchema.omit({ id: true, created_at: true });
+
+const IngredientSchema = z.object({
+    name: z.string().min(1, { message: 'Name is required' }),
+    quantity: z.string().optional(),
+    comment: z.string().optional(),
+});
+
+export async function createRecipe(prevState: RecipeFormState, formData: FormData) {
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) throw new Error("Unauthenticated user trying to access recipes page");
+
+    let imageError;
+    let imageUrl;
+
+    const imageFile = formData.get('image') as File;
+    if (!imageFile) imageError = "This field is required";
+    try {
+        const blob = await put(imageFile.name, imageFile, { access: "public" });
+        imageUrl = blob.url;
+    } catch (err) {
+        imageError = JSON.stringify(err);
+    }
+
+    const validatedFields = CreateRecipe.safeParse({
+        title: formData.get('title'),
+        description: formData.get('description'),
+        servings: formData.get('servings'),
+        prep_time_hours: formData.get('prep_time_hours'),
+        prep_time_minutes: formData.get('prep_time_minutes'),
+        cook_time_hours: formData.get('cook_time_hours'),
+        cook_time_minutes: formData.get('cook_time_minutes'),
+    });
+
+    if (!validatedFields.success || imageError) {
+        return {
+            errors: { ...validatedFields.error?.flatten()?.fieldErrors, image: imageError ? [imageError] : undefined },
+            message: 'Missing Fields. Failed to Create Recipe.',
+        };
+    }
+
+    const { title, description, servings, prep_time_hours, prep_time_minutes, cook_time_hours, cook_time_minutes } = validatedFields.data;
+
+    try {
+        const r = await sql`
+            INSERT INTO recipes (user_id, title, description, servings, prep_time_hours, prep_time_minutes, cook_time_hours, cook_time_minutes, image)
+            VALUES (${userId}, ${title}, ${description}, ${servings}, ${prep_time_hours}, ${prep_time_minutes}, ${cook_time_hours}, ${cook_time_minutes}, ${imageUrl})
+        `;
+    } catch (error) {
+        return {
+            message: 'Database Error: Failed to Create Recipe.',
+        };
+    }
+
+    revalidatePath('/recipes');
+    redirect('/recipes');
+}
 
 export async function createInvoice(prevState: State, formData: FormData) {
     // Validate form using Zod
@@ -317,3 +404,9 @@ export async function updateGroceryItem(
     revalidatePath('/grocery-list');
     redirect('/grocery-list');
 }
+
+// export async function uploadImage(formData: FormData) {
+//     const imageFile = formData.get('image') as File;
+//     const blob = await put(imageFile.name, imageFile, { access: "public" });
+//     return blob.url;
+// }
