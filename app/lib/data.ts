@@ -6,13 +6,37 @@ import {
   CustomersTableType,
   GroceryItem,
   GroceryList,
+  Ingredient,
+  Instruction,
   InvoiceForm,
   InvoicesTable,
   LatestInvoiceRaw,
+  Recipe,
   Revenue,
 } from './definitions';
 import { formatCurrency } from './utils';
 import { auth } from '@/auth';
+
+export async function fetchRecipes(offset: number, limit: number, query?: string) {
+  console.log('FETCH RECIPES', limit, offset, query)
+  const session = await auth()
+  const userId = session?.user?.id
+  if (!userId) throw new Error("Unauthenticated user trying to access recipes page")
+
+  try {
+    const data = await sql<Recipe>`
+      SELECT * FROM recipes
+      WHERE user_id = ${userId}
+       AND (title ILIKE ${`%${query}%`} OR description ILIKE ${`%${query}%`})
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `;
+    return data.rows;
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch recipes');
+  }
+}
 
 export async function fetchGroceryLists() {
   const session = await auth()
@@ -37,6 +61,44 @@ export async function fetchGroceryItems(groceryListId: string) {
     throw new Error('Failed to fetch grocery items.');
   }
 }
+
+export async function fetchRecipe(id: string): Promise<Recipe | null> {
+  try {
+    const recipeResult = await sql<Recipe>`SELECT * FROM recipes WHERE recipes.id = ${id}`;
+    if (recipeResult.rows.length === 0) {
+      return null;
+    }
+
+    const recipe = recipeResult.rows[0];
+    const ingredientsResult = await sql<Ingredient>`SELECT * FROM ingredients WHERE recipe_id = ${id}`;
+    recipe.ingredients = ingredientsResult.rows;
+
+    const instructionsResult = await sql<Instruction>`SELECT * FROM instructions WHERE recipe_id = ${id}`;
+    recipe.instructions = instructionsResult.rows;
+
+    return recipe;
+
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch recipe');
+  }
+}
+
+
+// export async function fetchRecipe(id: string): Promise<Recipe | null> {
+//   try {
+//     const result = await sql<Recipe>`SELECT * FROM recipes WHERE recipes.id = ${id}`;
+
+//     if (result.rows.length === 0) {
+//       return null;
+//     }
+
+//     return result.rows[0];
+//   } catch (error) {
+//     console.error('Database Error:', error);
+//     throw new Error('Failed to fetch recipe');
+//   }
+// }
 
 export async function fetchRevenue() {
   try {

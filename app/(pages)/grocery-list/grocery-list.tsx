@@ -39,7 +39,7 @@ function GroceryListItem({ groceryItem, index, onEditItem }: GroceryListItemProp
                 >
                     <div className="flex items-center">
                         <input
-                            className="cursor-pointer mr-3 rounded-sm w-6 h-6 text-violet-600 border-neutral-500 border-2 focus:ring-violet-400 hover:border-violet-600"
+                            className="cursor-pointer mr-3 rounded-sm w-6 h-6 text-violet-900 border-neutral-500 border-2 focus:ring-violet-400 hover:border-violet-900"
                             type="checkbox"
                             checked={!!optimisticItem.checked}
                             onChange={handleClickCheckbox}
@@ -61,10 +61,10 @@ function GroceryListItem({ groceryItem, index, onEditItem }: GroceryListItemProp
                     </div>
                     <div {...provided.dragHandleProps} className="flex items-center">
                         <PencilSquareIcon
-                            className="cursor-pointer w-6 mr-3 text-neutral-500 mt-[-2px] hover:text-violet-600"
+                            className="cursor-pointer w-6 mr-3 text-neutral-500 mt-[-2px] hover:text-violet-900"
                             onClick={onEditItem}
                         />
-                        <Bars3Icon className="cursor-grab w-7 text-neutral-500 hover:text-violet-600" />
+                        <Bars3Icon className="cursor-grab w-7 text-neutral-500 hover:text-violet-900" />
                     </div>
                 </li>
             )}
@@ -130,7 +130,7 @@ export default function GroceryList({ groceryItems }: GroceryListProps) {
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
                 <Autocomplete onAdd={handleAddItem} />
             </div>
-            <div className="mt-8 overflow-hidden rounded-lg bg-neutral-100 p-4">
+            <div className="mt-8 overflow-hidden rounded-lg bg-violet-100 p-4">
                 <span>{`${optimisticItems.length} items`}</span>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable droppableId="droppable">

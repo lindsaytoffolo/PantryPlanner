@@ -5,7 +5,7 @@ import FormControl from "./form-control";
 
 type TextAreaProps = {
     className?: string;
-    label: string;
+    label?: string;
     id: string;
     defaultValue?: string;
     errors?: string[];
@@ -31,8 +31,7 @@ const TextArea: React.FC<TextAreaProps> = ({
             <textarea
                 id={id}
                 name={id}
-                className="bg-white block px-2 pb-2 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-violet-600 peer"
-                placeholder=" "
+                className="w-full text-gray-900 appearance-none border-0 p-2 rounded-lg focus:outline-none focus:ring-0"
                 defaultValue={defaultValue}
                 {...textareaProps}
             />

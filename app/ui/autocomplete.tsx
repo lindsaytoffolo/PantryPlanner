@@ -101,13 +101,13 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ onAdd }) => {
         <div className="relative autocomplete w-full">
             <div className="flex items-center">
                 <span className="absolute left-2">
-                    <PlusIcon className="text-violet-600 w-6 stroke-2" />
+                    <PlusIcon className="text-violet-900 w-6 stroke-2" />
                 </span>
                 <input
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}
-                    className="border p-2 w-full rounded-xl pl-10 focus:border-violet-600 border-gray-300 border-1"
+                    className="border p-2 w-full rounded-xl pl-10 focus:border-violet-900 border-gray-300 border-1"
                     placeholder="Add item"
                     onFocus={() => setIsDropdownVisible(true)}
                 />

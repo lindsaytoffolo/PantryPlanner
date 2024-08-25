@@ -1,6 +1,6 @@
 import type { NextAuthConfig } from 'next-auth';
 
-const protectedRoutes = ['/home', '/grocery-list']
+const protectedRoutes = ['/home', '/grocery-list', '/recipes']
 
 export const authConfig = {
     session: {
@@ -14,10 +14,12 @@ export const authConfig = {
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user;
             const isOnProtectedRoute = protectedRoutes.some(route => nextUrl.pathname.startsWith(route))
+            const callbackUrl = nextUrl.searchParams.get('callbackUrl')
             if (isOnProtectedRoute) {
                 if (isLoggedIn) return true;
                 return false; // Redirect unauthenticated users to login page
             } else if (isLoggedIn) {
+                if (callbackUrl) return Response.redirect(new URL(callbackUrl, nextUrl))
                 return Response.redirect(new URL('/home', nextUrl));
             }
             return true;

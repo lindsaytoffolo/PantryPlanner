@@ -5,10 +5,11 @@ import FormControl from "./form-control";
 
 type InputProps = {
     className?: string;
-    label: string;
+    label?: string;
     id: string;
     defaultValue?: string;
     errors?: string[];
+    unit?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 const Input: React.FC<InputProps> = ({
@@ -18,6 +19,7 @@ const Input: React.FC<InputProps> = ({
     defaultValue,
     errors,
     required,
+    unit,
     ...inputProps
 }) => {
     return (
@@ -28,12 +30,12 @@ const Input: React.FC<InputProps> = ({
             errors={errors}
             required={required}
         >
+            {unit && <span className="flex items-center my-2 ml-2 text-gray-400">{unit}</span>}
             <input
                 type="text"
                 id={id}
                 name={id}
-                className={`bg-white block px-2 pb-2 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-violet-600 peer`}
-                placeholder=" "
+                className="w-full text-gray-800 appearance-none border-0 p-2 rounded-lg focus:outline-none focus:ring-0"
                 defaultValue={defaultValue}
                 aria-describedby={`${id}-error`}
                 {...inputProps}

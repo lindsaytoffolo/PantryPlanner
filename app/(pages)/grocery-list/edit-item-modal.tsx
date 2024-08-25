@@ -6,80 +6,8 @@ import { GroceryItem } from "@/app/lib/definitions";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/app/ui/button";
 import { GroceryItemFormState, deleteGroceryItem, updateGroceryItem } from "@/app/lib/actions";
-
-type InputProps = {
-    label: string;
-    id: string;
-    defaultValue?: string;
-    errors?: string[];
-};
-const Input = ({ label, id, defaultValue, errors }: InputProps) => {
-    return (
-        <div>
-            <div className="relative">
-                <input
-                    type="text"
-                    id={id}
-                    name={id}
-                    className="block px-2 pb-2 pt-3.5 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-violet-600 peer"
-                    placeholder=" "
-                    defaultValue={defaultValue}
-                    aria-describedby={`${id}-error`}
-                />
-                <label
-                    htmlFor={id}
-                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-violet-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >
-                    {label}
-                </label>
-            </div>
-            <div id={`${id}-error`} aria-live="polite" aria-atomic="true">
-                {errors &&
-                    errors.map((error: string) => (
-                        <p className="mt-2 text-sm text-red-500" key={error}>
-                            {error}
-                        </p>
-                    ))}
-            </div>
-        </div>
-    );
-};
-
-type TextAreaProps = {
-    label: string;
-    id: string;
-    defaultValue?: string;
-    errors?: string[];
-};
-const TextArea = ({ label, id, defaultValue, errors }: TextAreaProps) => {
-    return (
-        <div>
-            <div className="relative">
-                <textarea
-                    id={id}
-                    name={id}
-                    className="block px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-transparent rounded-lg border-1 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-violet-600 peer"
-                    placeholder=" "
-                    defaultValue={defaultValue}
-                />
-                <label
-                    htmlFor={id}
-                    className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-violet-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto start-1"
-                >
-                    {label}
-                </label>
-            </div>
-            <div id={`${id}-error`} aria-live="polite" aria-atomic="true">
-                {errors &&
-                    errors.map((error: string) => (
-                        <p className="mt-2 text-sm text-red-500" key={error}>
-                            {error}
-                        </p>
-                    ))}
-            </div>
-        </div>
-    );
-};
+import TextArea from "@/app/ui/text-area";
+import Input from "@/app/ui/input";
 
 interface EditItemModalProps extends Omit<ModalProps, "children"> {
     groceryItem?: GroceryItem;

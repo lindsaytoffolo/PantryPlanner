@@ -24,22 +24,24 @@ export interface Recipe {
   cook_time_hours?: number; // Optional field
   cook_time_minutes?: number; // Optional field
   created_at?: Date; // Timestamp with Time Zone, optional if not provided
+  ingredients?: Ingredient[];
+  instructions?: Instruction[];
 }
 
 // Types for Ingredients Table
 export interface Ingredient {
-  id: string; // UUID
-  recipe_id: string; // UUID (Foreign Key to recipes.id)
+  id?: string; // UUID
+  recipe_id?: string; // UUID (Foreign Key to recipes.id)
   name: string;
   quantity?: string; // Optional field
-  modifier?: string; // Optional field
+  comment?: string; // Optional field
   created_at?: Date; // Timestamp with Time Zone, optional if not provided
 }
 
 // Types for Instructions Table
 export interface Instruction {
-  id: string; // UUID
-  recipe_id: string; // UUID (Foreign Key to recipes.id)
+  id?: string; // UUID
+  recipe_id?: string; // UUID (Foreign Key to recipes.id)
   step_number: number;
   instruction: string;
   created_at?: Date; // Timestamp with Time Zone, optional if not provided

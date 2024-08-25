@@ -6,21 +6,21 @@ import Image from "next/image";
 export default function Page() {
     return (
         <main className="flex min-h-screen flex-col p-6">
-            <div className="flex h-20 shrink-0 items-end rounded-lg bg-violet-500 p-4 md:h-52">
+            <div className="flex h-20 shrink-0 items-end rounded-lg bg-violet-900 p-4 md:h-52">
                 <Logo />
             </div>
             <div className="mt-4 flex grow flex-col gap-4 md:flex-row">
                 <div className="flex flex-col justify-center gap-6 rounded-lg bg-gray-50 px-6 py-10 md:w-2/5 md:px-20">
                     <p className="text-xl text-gray-800 md:text-3xl md:leading-normal">
                         <strong>Welcome to Acme.</strong> This is the example for the{" "}
-                        <a href="https://nextjs.org/learn/" className="text-violet-500">
+                        <a href="https://nextjs.org/learn/" className="text-violet-900">
                             Next.js Learn Course
                         </a>
                         , brought to you by Vercel.
                     </p>
                     <Link
                         href="/login"
-                        className="flex items-center gap-5 self-start rounded-lg bg-violet-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-violet-400 md:text-base"
+                        className="flex items-center gap-5 self-start rounded-lg bg-violet-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-violet-400 md:text-base"
                     >
                         <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
                     </Link>
