@@ -9,6 +9,7 @@ import { AuthError } from 'next-auth';
 import { fetchFoodData } from './nutritionixApi';
 import { GroceryItem, Ingredient, Instruction } from './definitions';
 import { put } from "@vercel/blob";
+import { db } from '@vercel/postgres';
 
 
 const GROCERY_LIST_ID = '3157d662-b5e8-49d4-a49d-edb123248dbf'
@@ -104,31 +105,7 @@ const InstructionSchema = z.object({
     step_number: z.number(),
 });
 
-export async function createRecipe(prevState: RecipeFormState, formData: FormData) {
-    const session = await auth();
-    const userId = session?.user?.id;
-    if (!userId) throw new Error("Unauthenticated user trying to access recipes page");
-
-    let imageError;
-    let imageUrl;
-
-    const imageFile = formData.get('image') as File | undefined;
-    if (imageFile && imageFile.size > 0) {
-        try {
-            // TODO: prevent duplicate uploads if the users attemps to submit multiple times
-            const blob = await put(imageFile.name, imageFile, { access: "public" });
-            imageUrl = blob.url;
-        } catch (err) {
-            if (err instanceof Error) {
-                imageError = err.message
-            } else {
-                imageError = 'An unknown error occurred while uploading the image';
-            }
-        }
-    } else {
-        imageError = "This field is required";
-    }
-
+const parseRecipeFields = (formData: FormData) => {
     const validatedFields = CreateRecipe.safeParse({
         title: formData.get('title'),
         description: formData.get('description'),
@@ -164,6 +141,32 @@ export async function createRecipe(prevState: RecipeFormState, formData: FormDat
         instruction_index++;
     }
 
+    return { validatedFields, ingredients, instructions }
+}
+
+export async function createRecipe(prevState: RecipeFormState, formData: FormData) {
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) throw new Error("Unauthenticated user trying to access recipes page");
+
+    let imageError: string | undefined;
+    let imageUrl: string | undefined;
+
+    const imageFile = formData.get('image') as File | undefined;
+    if (imageFile && imageFile.size > 0) {
+        try {
+            // TODO: prevent duplicate uploads if the users attemps to submit multiple times
+            const blob = await put(imageFile.name, imageFile, { access: "public" });
+            imageUrl = blob.url;
+        } catch (err) {
+            imageError = err instanceof Error ? err.message : 'An unknown error occurred while uploading the image';
+        }
+    } else {
+        imageError = "This field is required";
+    }
+
+    const { validatedFields, ingredients, instructions } = parseRecipeFields(formData)
+
     if (!validatedFields.success || imageError) {
         return {
             errors: { ...validatedFields.error?.flatten()?.fieldErrors, image: imageError ? [imageError] : undefined },
@@ -172,38 +175,128 @@ export async function createRecipe(prevState: RecipeFormState, formData: FormDat
     }
 
     const { title, description, servings, prep_time_hours, prep_time_minutes, cook_time_hours, cook_time_minutes } = validatedFields.data;
-    let recipeId;
-    try {
-        const r = await sql`
-            INSERT INTO recipes (user_id, title, description, servings, prep_time_hours, prep_time_minutes, cook_time_hours, cook_time_minutes, image)
-            VALUES (${userId}, ${title}, ${description}, ${servings}, ${prep_time_hours}, ${prep_time_minutes}, ${cook_time_hours}, ${cook_time_minutes}, ${imageUrl})
-            RETURNING id
-        `;
 
-        recipeId = r.rows[0].id;
+    let recipeId;
+    const client = await db.connect();
+
+    try {
+        await client.query('BEGIN');
+
+        const { rows } = await client.query(`
+            INSERT INTO recipes (user_id, title, description, servings, prep_time_hours, prep_time_minutes, cook_time_hours, cook_time_minutes, image)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            RETURNING id
+        `, [userId, title, description, servings, prep_time_hours, prep_time_minutes, cook_time_hours, cook_time_minutes, imageUrl]);
+
+        recipeId = rows[0].id;
         for (const ingredient of ingredients) {
-            await sql`
+            await client.query(`
                 INSERT INTO ingredients (recipe_id, name, quantity, comment)
-                VALUES (${recipeId}, ${ingredient.name}, ${ingredient.quantity}, ${ingredient.comment})
-            `;
+                VALUES ($1, $2, $3, $4)
+            `, [recipeId, ingredient.name, ingredient.quantity, ingredient.comment]);
         }
 
         for (const instruction of instructions) {
-            await sql`
+            await client.query(`
                 INSERT INTO instructions (recipe_id, instruction, step_number)
-                VALUES (${recipeId}, ${instruction.instruction}, ${instruction.step_number})
-            `;
+                VALUES ($1, $2, $3)
+            `, [recipeId, instruction.instruction, instruction.step_number]);
         }
 
+        await client.query('COMMIT');
+
     } catch (error) {
+        await client.query('ROLLBACK');
         return {
             message: 'Database Error: Failed to Create Recipe.',
         };
+    } finally {
+        client.release();
     }
 
     revalidatePath(`/recipes/${recipeId}`);
     redirect(`/recipes/${recipeId}`);
 }
+
+export async function updateRecipe(recipeId: string, prevState: RecipeFormState, formData: FormData) {
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) throw new Error("Unauthenticated user trying to access recipes page");
+
+    let imageError: string | undefined;
+    let imageUrl: string | undefined;
+
+    // Handle image update if a new image is provided
+    const imageFile = formData.get('image') as File | undefined;
+    if (imageFile && imageFile.size > 0) {
+        try {
+            const blob = await put(imageFile.name, imageFile, { access: "public" });
+            imageUrl = blob.url;
+        } catch (err) {
+            imageError = err instanceof Error ? err.message : 'An unknown error occurred while uploading the image';
+        }
+    }
+
+    const { validatedFields, ingredients, instructions } = parseRecipeFields(formData)
+
+    if (!validatedFields.success || imageError) {
+        return {
+            errors: { ...validatedFields.error?.flatten()?.fieldErrors, image: imageError ? [imageError] : undefined },
+            message: 'Missing Fields. Failed to Update Recipe.',
+        };
+    }
+
+    const { title, description, servings, prep_time_hours, prep_time_minutes, cook_time_hours, cook_time_minutes } = validatedFields.data;
+
+    const client = await db.connect();
+    try {
+        await client.query('BEGIN');
+
+        await client.query(`
+            UPDATE recipes
+            SET
+                title = $1,
+                description = $2,
+                servings = $3,
+                prep_time_hours = $4,
+                prep_time_minutes = $5,
+                cook_time_hours = $6,
+                cook_time_minutes = $7,
+                image = COALESCE($8, image)
+            WHERE id = $9 AND user_id = $10
+        `, [title, description, servings, prep_time_hours, prep_time_minutes, cook_time_hours, cook_time_minutes, imageUrl, recipeId, userId]);
+
+        await client.query('DELETE FROM ingredients WHERE recipe_id = $1', [recipeId]);
+        for (const ingredient of ingredients) {
+            await client.query(`
+                INSERT INTO ingredients (recipe_id, name, quantity, comment)
+                VALUES ($1, $2, $3, $4)
+            `, [recipeId, ingredient.name, ingredient.quantity, ingredient.comment]);
+        }
+
+        await client.query('DELETE FROM instructions WHERE recipe_id = $1', [recipeId]);
+        for (const instruction of instructions) {
+            await client.query(`
+                INSERT INTO instructions (recipe_id, instruction, step_number)
+                VALUES ($1, $2, $3)
+            `, [recipeId, instruction.instruction, instruction.step_number]);
+        }
+
+        await client.query('COMMIT');
+
+    } catch (error) {
+        await client.query('ROLLBACK');
+        return {
+            message: 'Database Error: Failed to Update Recipe.',
+        };
+    } finally {
+        client.release();
+    }
+
+    revalidatePath(`/recipes/${recipeId}`);
+    redirect(`/recipes/${recipeId}`);
+}
+
 
 export async function createInvoice(prevState: State, formData: FormData) {
     // Validate form using Zod
@@ -228,10 +321,10 @@ export async function createInvoice(prevState: State, formData: FormData) {
 
     // Insert data into the database
     try {
-        //     await sql`
-        //     INSERT INTO invoices (customer_id, amount, status, date)
-        //     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
-        //   `;
+        await sql`
+            INSERT INTO invoices (customer_id, amount, status, date)
+            VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
+          `;
     } catch (error) {
         // If a database error occurs, return a more specific error.
         return {

@@ -5,6 +5,8 @@ import { Recipe } from "@/app/lib/definitions";
 import React from "react";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import DeleteRecipeModal from "./delete-recipe-modal";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 type RecipeHeaderProps = {
     recipe: Recipe;
@@ -12,6 +14,7 @@ type RecipeHeaderProps = {
 
 const RecipeHeader = ({ recipe }: RecipeHeaderProps) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const pathname = usePathname();
 
     const onCloseModal = () => {
         setIsModalOpen(false);
@@ -58,7 +61,9 @@ const RecipeHeader = ({ recipe }: RecipeHeaderProps) => {
                         </div>
                     </div>
                     <div className="flex items-end">
-                        <PencilSquareIcon className="cursor-pointer w-8 mr-4" />
+                        <Link href={`${pathname}/edit`}>
+                            <PencilSquareIcon className="cursor-pointer w-8 mr-4" />
+                        </Link>
                         <TrashIcon
                             onClick={openModal}
                             className="cursor-pointer w-8 text-red-500"

@@ -11,7 +11,7 @@ export default async function GrocerySummary() {
     return (
         <HomeCard href="/grocery-list" className="bg-violet-900 row-span-2 text-white">
             <h3 className="text-2xl font-medium self-start mb-4">Grocery List</h3>
-            <ul className="list-disc p-4 pl-8 space-y-2 rounded-lg bg-white text-gray-800 text-left h-full overflow-scroll">
+            <ul className="list-disc p-4 pl-8 space-y-2 rounded-lg bg-white text-gray-800 text-left h-full overflow-y-scroll">
                 {groceryItems.map((item) => (
                     <li key={item.id} className="text-lg">
                         <span className="font-medium mr-2">

@@ -7,10 +7,16 @@ import { twMerge } from "tailwind-merge";
 interface ImageUploaderProps {
     setPreviewImage: React.Dispatch<React.SetStateAction<string | undefined>>;
     previewImage?: string;
+    setImage: React.Dispatch<React.SetStateAction<File | null>>;
     errors?: string[];
 }
 
-const ImageUploader: React.FC<ImageUploaderProps> = ({ setPreviewImage, previewImage, errors }) => {
+const ImageUploader: React.FC<ImageUploaderProps> = ({
+    setPreviewImage,
+    previewImage,
+    setImage,
+    errors,
+}) => {
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -21,6 +27,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ setPreviewImage, previewI
         const file = event.dataTransfer.files[0];
         if (file && file.type.startsWith("image/")) {
             setPreviewImage(URL.createObjectURL(file));
+            setImage(file);
         }
     };
 
@@ -31,6 +38,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ setPreviewImage, previewI
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] as File;
         setPreviewImage((oldImage) => (file ? URL.createObjectURL(file) : oldImage));
+        file && setImage(file);
     };
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {

@@ -7,7 +7,6 @@ type TextAreaProps = {
     className?: string;
     label?: string;
     id: string;
-    defaultValue?: string;
     errors?: string[];
 } & React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 

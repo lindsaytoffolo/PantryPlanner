@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 export default async function Page() {
     return (
         <main>
-            <Breadcrumbs breadcrumbs={[{ label: "Home", href: "/home" }]} />
-            <div className="grid grid-cols-2 grid-rows-2 grid-flow-col gap-4 h-[calc(100vh-148px)] max-w-[800px] mx-auto">
+            <Breadcrumbs breadcrumbs={[{ label: "Home", href: "/home", active: true }]} />
+            <div className="grid grid-cols-2 grid-rows-2 grid-flow-col gap-4 h-[calc(100vh-152px)] max-w-[800px] mx-auto">
                 <Suspense fallback={<RecipeCardSkeleton />}>
                     <RandomRecipe />
                 </Suspense>

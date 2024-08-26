@@ -27,7 +27,7 @@ export function Button({
     const variantStyles =
         variant === "default"
             ? "px-4 bg-violet-900 text-white hover:bg-violet-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-900 active:bg-violet-950 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
-            : "px-1 text-violet-900 hover:text-violet-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-900 aria-disabled:cursor-not-allowed aria-disabled:opacity-50";
+            : "pl-1 pr-4 text-violet-900 hover:text-violet-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-900 aria-disabled:cursor-not-allowed aria-disabled:opacity-50";
 
     return (
         <button

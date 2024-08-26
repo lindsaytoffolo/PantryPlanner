@@ -13,7 +13,7 @@ const HomeCard: React.FC<HomeCardProps> = ({ href, className, children }) => {
         <Link
             href={href}
             className={classNames(
-                "bg-gray-100 rounded-lg shadow-lg overflow-scroll transition-transform p-6 transform hover:scale-105 focus:outline-none",
+                "bg-gray-100 rounded-lg shadow-lg overflow-hidden transition-transform p-6 transform hover:scale-105 focus:outline-none",
                 className
             )}
         >

@@ -7,7 +7,6 @@ type InputProps = {
     className?: string;
     label?: string;
     id: string;
-    defaultValue?: string;
     errors?: string[];
     unit?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
