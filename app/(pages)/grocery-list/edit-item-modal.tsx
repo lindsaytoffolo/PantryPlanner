@@ -68,7 +68,7 @@ const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, groceryI
 
                 <div className="mt-6 flex justify-between">
                     <Button
-                        className="bg-red-600"
+                        className="bg-red-600 hover:bg-red-800 active:bg-red-800 focus-visible:outline-red-400"
                         onClick={() => deleteGroceryItem(groceryItem.id!)}
                     >
                         <TrashIcon className="w-5 text-white mr-1" />

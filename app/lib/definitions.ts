@@ -26,6 +26,8 @@ export interface Recipe {
   created_at?: Date; // Timestamp with Time Zone, optional if not provided
   ingredients?: Ingredient[];
   instructions?: Instruction[];
+  match_source?: string;
+  ingredient_match?: string;
 }
 
 // Types for Ingredients Table

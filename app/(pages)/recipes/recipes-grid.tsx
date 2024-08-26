@@ -50,7 +50,7 @@ export default function RecipesGrid({ initialRecipes, query }: RecipesGridProps)
         <>
             <div className="grid grid-cols-3 gap-4">
                 {recipes?.map((recipe) => (
-                    <RecipeCard key={recipe.id} recipe={recipe} />
+                    <RecipeCard key={recipe.id} recipe={recipe} query={query} />
                 ))}
             </div>
             <div className="mt-8">

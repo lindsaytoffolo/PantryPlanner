@@ -1,8 +1,26 @@
+"use client";
+
+import { useState } from "react";
 import { Recipe } from "@/app/lib/definitions";
 import React from "react";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import DeleteRecipeModal from "./delete-recipe-modal";
 
-const RecipeHeader = ({ recipe }: { recipe: Recipe }) => {
+type RecipeHeaderProps = {
+    recipe: Recipe;
+};
+
+const RecipeHeader = ({ recipe }: RecipeHeaderProps) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const onCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
     const formatPrepTime = (hours?: number, minutes?: number) => {
         if (hours && minutes) {
             return `${hours}h ${minutes}mins`;
@@ -14,6 +32,7 @@ const RecipeHeader = ({ recipe }: { recipe: Recipe }) => {
 
     return (
         <div className="w-full rounded-xl overflow-hidden flex h-96 shadow">
+            <DeleteRecipeModal isOpen={isModalOpen} onClose={onCloseModal} recipe={recipe} />
             <div className="w-5/12">
                 <img src={recipe.image} alt={recipe.title} className="w-full h-full object-cover" />
             </div>
@@ -40,7 +59,10 @@ const RecipeHeader = ({ recipe }: { recipe: Recipe }) => {
                     </div>
                     <div className="flex items-end">
                         <PencilSquareIcon className="cursor-pointer w-8 mr-4" />
-                        <TrashIcon className="cursor-pointer w-8 text-red-500" />
+                        <TrashIcon
+                            onClick={openModal}
+                            className="cursor-pointer w-8 text-red-500"
+                        />
                     </div>
                 </div>
             </div>

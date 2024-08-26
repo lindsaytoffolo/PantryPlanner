@@ -7,7 +7,7 @@ const RecipeIngredients = ({ recipe }: { recipe: Recipe }) => {
             <h3 className="text-2xl font-bold text-gray-800 mb-4">Ingredients</h3>
             <ul className="list-disc pl-6 space-y-2">
                 {recipe.ingredients?.map((i) => (
-                    <li className="text-xl">
+                    <li key={i.id} className="text-xl">
                         <span className="text-gray-700 font-semibold mr-2">
                             {i.quantity ? `${i.quantity} ${i.name}` : i.name}
                         </span>

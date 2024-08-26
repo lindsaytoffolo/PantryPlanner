@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import clsx from "clsx";
+import { classNames } from "../lib/utils";
 
 interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
     label: string;
@@ -17,7 +17,7 @@ const FormLabel: React.FC<FormLabelProps> = ({
     return (
         <label
             {...labelProps}
-            className={clsx(
+            className={classNames(
                 "block text-sm font-medium text-gray-700",
                 required && 'after:content-["*"] after:text-red-500 after:ml-1',
                 className

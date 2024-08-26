@@ -28,7 +28,7 @@ export default async function Page({
             <Breadcrumbs breadcrumbs={[{ label: "Recipes", href: "/recipes", active: true }]} />
 
             <div className="mb-8 flex items-center justify-between gap-2">
-                <Search placeholder="Search recipes..." />
+                <Search placeholder="Find recipes by title, description, or ingredients..." />
                 <Link className="flex justify-end" href="/recipes/create">
                     <Button>Create Recipe</Button>
                 </Link>

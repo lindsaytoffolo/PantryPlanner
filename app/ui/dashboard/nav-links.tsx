@@ -3,7 +3,7 @@
 import { CakeIcon, HomeIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import clsx from "clsx";
+import { classNames } from "@/app/lib/utils";
 
 const links = [
     { name: "Home", href: "/home", icon: HomeIcon },
@@ -21,7 +21,7 @@ export default function NavLinks() {
                     <Link
                         key={link.name}
                         href={link.href}
-                        className={clsx(
+                        className={classNames(
                             "flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-violet-100 hover:text-violet-900 md:flex-none md:justify-start md:p-2 md:px-3 shadow",
                             {
                                 "bg-violet-100 text-violet-900": pathname === link.href,

@@ -1,5 +1,6 @@
-import clsx from "clsx";
-import { twMerge } from "tailwind-merge";
+import { classNames } from "../lib/utils";
+
+// cva
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
@@ -32,7 +33,7 @@ export function Button({
         <button
             {...rest}
             type={type}
-            className={twMerge(clsx(baseStyles, variantStyles, className))}
+            className={classNames(baseStyles, variantStyles, className)}
             disabled={disabled || loading}
             aria-disabled={disabled || loading}
         >

@@ -53,6 +53,9 @@ importers:
       react-intersection-observer:
         specifier: ^9.13.0
         version: 9.13.0(react-dom@19.0.0-rc-f38c22b244-20240704(react@19.0.0-rc-f38c22b244-20240704))(react@19.0.0-rc-f38c22b244-20240704)
+      react-string-replace:
+        specifier: ^1.1.1
+        version: 1.1.1
       request:
         specifier: ^2.88.2
         version: 2.88.2
@@ -1175,6 +1178,10 @@ packages:
         optional: true
       redux:
         optional: true
+
+  react-string-replace@1.1.1:
+    resolution: {integrity: sha512-26TUbLzLfHQ5jO5N7y3Mx88eeKo0Ml0UjCQuX4BMfOd/JX+enQqlKpL1CZnmjeBRvQE8TR+ds9j1rqx9CxhKHQ==}
+    engines: {node: '>=0.12.0'}
 
   react@19.0.0-rc-f38c22b244-20240704:
     resolution: {integrity: sha512-OP8O6Oc1rdR9IdIKJRKaL1PYd4eGkn6f88VqiygWyyG4P4RmPPix5pp7MatqSt9TnBOcVT+lBMGoVxRgUFeudQ==}
@@ -2425,6 +2432,8 @@ snapshots:
       '@types/react-dom': 18.3.0
       react-dom: 19.0.0-rc-f38c22b244-20240704(react@19.0.0-rc-f38c22b244-20240704)
       redux: 4.2.1
+
+  react-string-replace@1.1.1: {}
 
   react@19.0.0-rc-f38c22b244-20240704: {}
 

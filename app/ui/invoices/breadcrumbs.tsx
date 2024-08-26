@@ -1,4 +1,4 @@
-import { clsx } from "clsx";
+import { classNames } from "@/app/lib/utils";
 import Link from "next/link";
 
 interface Breadcrumb {
@@ -15,7 +15,9 @@ export default function Breadcrumbs({ breadcrumbs }: { breadcrumbs: Breadcrumb[]
                     <li
                         key={breadcrumb.href}
                         aria-current={breadcrumb.active}
-                        className={clsx(breadcrumb.active ? "text-gray-900" : "text-gray-500")}
+                        className={classNames(
+                            breadcrumb.active ? "text-gray-900" : "text-gray-500"
+                        )}
                     >
                         <Link href={breadcrumb.href}>{breadcrumb.label}</Link>
                         {index < breadcrumbs.length - 1 ? (

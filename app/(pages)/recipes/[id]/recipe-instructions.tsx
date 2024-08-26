@@ -7,7 +7,7 @@ const RecipeInstructions = ({ recipe }: { recipe: Recipe }) => {
             <h3 className="text-2xl font-bold text-gray-800 mb-4">Instructions</h3>
             <ol className="list-decimal pl-6 space-y-2">
                 {recipe.instructions?.map((i) => (
-                    <li className="text-xl">
+                    <li key={i.id} className="text-xl">
                         <span className="text-gray-500">{i.instruction}</span>
                     </li>
                 ))}

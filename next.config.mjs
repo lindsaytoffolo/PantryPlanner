@@ -14,6 +14,11 @@ const nextConfig = {
                 hostname: "ycbvtsutucecgrqb.public.blob.vercel-storage.com",
                 port: "",
             },
+            {
+                protocol: "https",
+                hostname: "nix-tag-images.s3.amazonaws.com",
+                port: "",
+            },
         ],
     },
 };

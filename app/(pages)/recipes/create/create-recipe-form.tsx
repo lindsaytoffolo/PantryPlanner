@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useActionState, useState, useTransition } from "react";
+import React, { useActionState, useRef, useState, useTransition } from "react";
 import ImageUploader from "./image-uploader";
 import Input from "@/app/ui/input";
 import TextArea from "@/app/ui/text-area";
 import { RecipeFormState, createRecipe } from "@/app/lib/actions";
 import { Button } from "@/app/ui/button";
-import { Ingredient, Instruction } from "@/app/lib/definitions";
+import { Ingredient } from "@/app/lib/definitions";
 import { XMarkIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
 import FormLabel from "@/app/ui/form-label";
 
@@ -20,6 +20,7 @@ const CreateRecipeForm: React.FC = () => {
     const [instructions, setInstructions] = useState<string[]>([""]);
     const initialState: RecipeFormState = { message: null, errors: {} };
     const [state, formAction, isSubmitting] = useActionState(createRecipe, initialState);
+    const [_, startTransition] = useTransition();
 
     const handleIngredientChange = (index: number, field: keyof Ingredient, value: string) => {
         setIngredients((prev) => prev.toSpliced(index, 1, { ...prev[index], [field]: value }));
@@ -45,11 +46,17 @@ const CreateRecipeForm: React.FC = () => {
         setInstructions((prev) => prev.filter((_, i) => i !== index));
     };
 
-    console.log("^^^^^", state);
+    // Use onSubmit instead of form action to prevent form from resetting
+    // More detailed discussion: https://github.com/facebook/react/issues/29034
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.target as HTMLFormElement);
+        startTransition(() => formAction(formData));
+    };
 
     return (
         <div className="container mt-8 bg-white rounded-lg p-6">
-            <form action={formAction} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
                 <Input label="Title" id="title" errors={state.errors?.title} required />
                 <div className="flex gap-4">
                     <div className="grow flex flex-col">
@@ -66,6 +73,7 @@ const CreateRecipeForm: React.FC = () => {
                             label="Number of servings"
                             id="servings"
                             type="number"
+                            min={0}
                             errors={state.errors?.servings}
                             required
                         />
@@ -76,6 +84,7 @@ const CreateRecipeForm: React.FC = () => {
                                 unit="hours"
                                 id="prep_time_hours"
                                 type="number"
+                                min={0}
                                 errors={state.errors?.prep_time_hours}
                             />
                             <Input
@@ -83,6 +92,7 @@ const CreateRecipeForm: React.FC = () => {
                                 unit="mins"
                                 id="prep_time_minutes"
                                 type="number"
+                                min={0}
                                 errors={state.errors?.prep_time_minutes}
                             />
                         </div>
@@ -93,6 +103,7 @@ const CreateRecipeForm: React.FC = () => {
                                 unit="hours"
                                 id="cook_time_hours"
                                 type="number"
+                                min={0}
                                 errors={state.errors?.cook_time_hours}
                             />
                             <Input
@@ -100,6 +111,7 @@ const CreateRecipeForm: React.FC = () => {
                                 unit="mins"
                                 id="cook_time_minutes"
                                 type="number"
+                                min={0}
                                 errors={state.errors?.cook_time_minutes}
                             />
                         </div>

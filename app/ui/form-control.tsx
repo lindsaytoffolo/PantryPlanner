@@ -2,6 +2,7 @@
 
 import React from "react";
 import FormLabel from "./form-label";
+import { classNames } from "../lib/utils";
 
 type FormControlProps = {
     className?: string;
@@ -21,9 +22,14 @@ const FormControl: React.FC<FormControlProps> = ({
     children,
 }) => {
     return (
-        <div className={className}>
+        <div className="flex-1">
             {label && <FormLabel htmlFor={id} label={label} required={required} />}
-            <div className="flex w-full bg-transparent rounded-lg border border-gray-300 hover:border-gray-500 focus-within:border-violet-900 shadow-custom-input">
+            <div
+                className={classNames(
+                    "flex w-full bg-transparent rounded-lg border border-gray-300 hover:border-gray-500 focus-within:border-violet-900 shadow-custom-input",
+                    className
+                )}
+            >
                 {children}
             </div>
             <div id={`${id}-error`} aria-live="polite" aria-atomic="true">

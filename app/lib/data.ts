@@ -25,11 +25,36 @@ export async function fetchRecipes(offset: number, limit: number, query?: string
 
   try {
     const data = await sql<Recipe>`
-      SELECT * FROM recipes
-      WHERE user_id = ${userId}
-       AND (title ILIKE ${`%${query}%`} OR description ILIKE ${`%${query}%`})
-      LIMIT ${limit}
-      OFFSET ${offset}
+        WITH recipe_matches AS (
+            SELECT DISTINCT ON (r.id)
+                r.*,
+                CASE
+                    WHEN i.name ILIKE ${`%${query}%`} THEN i.name
+                    ELSE NULL
+                END AS ingredient_match,
+                CASE
+                    WHEN r.title ILIKE ${`%${query}%`} THEN 'title'
+                    WHEN r.description ILIKE ${`%${query}%`} THEN 'description'
+                    WHEN i.name ILIKE ${`%${query}%`} THEN 'ingredient'
+                    ELSE 'none'
+                END AS match_source
+            FROM recipes r
+            LEFT JOIN ingredients i ON r.id = i.recipe_id
+            WHERE r.user_id = ${userId}
+              AND (r.title ILIKE ${`%${query}%`} 
+                  OR r.description ILIKE ${`%${query}%`} 
+                  OR i.name ILIKE ${`%${query}%`})
+        )
+        SELECT *
+        FROM recipe_matches
+        ORDER BY CASE match_source
+              WHEN 'title' THEN 1
+              WHEN 'description' THEN 2
+              WHEN 'ingredient' THEN 3
+              ELSE 4
+          END
+        LIMIT ${limit}
+        OFFSET ${offset};
     `;
     return data.rows;
   } catch (error) {
@@ -59,6 +84,27 @@ export async function fetchGroceryItems(groceryListId: string) {
   } catch (error) {
     console.error('Database Error:', error);
     throw new Error('Failed to fetch grocery items.');
+  }
+}
+
+export async function fetchRandomRecipe(): Promise<Recipe> {
+  const session = await auth()
+  const userId = session?.user?.id
+  if (!userId) throw new Error("Unauthenticated user trying to access protected page")
+
+  try {
+    const recipeResult = await sql<Recipe>`SELECT *
+        FROM recipes
+        WHERE user_id = ${userId}
+        ORDER BY RANDOM()
+        LIMIT 1;
+    `;
+
+    return recipeResult.rows[0];
+
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch recipe');
   }
 }
 
