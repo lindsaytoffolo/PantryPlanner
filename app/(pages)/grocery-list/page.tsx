@@ -1,6 +1,6 @@
 import { fetchGroceryItems, fetchGroceryLists } from "@/app/lib/data";
+import GroceryList from "@/app/ui/grocery-list/grocery-list";
 import { Metadata } from "next";
-import GroceryList from "./grocery-list";
 
 export const metadata: Metadata = {
     title: "Grocery List",
@@ -14,7 +14,7 @@ export default async function Page() {
     if (!groceryItems?.length) return null;
 
     return (
-        <div className="w-full max-w-[700px] mx-auto mt-8">
+        <div className="mx-auto mt-8 w-full max-w-[700px]">
             <div className="flex w-full items-center justify-between">
                 <h1 className="text-3xl">Grocery List</h1>
             </div>

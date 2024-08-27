@@ -1,14 +1,15 @@
 import { Recipe } from "@/app/lib/definitions";
-import React from "react";
 
 const RecipeIngredients = ({ recipe }: { recipe: Recipe }) => {
     return (
-        <div className="w-5/12 rounded-xl bg-violet-100 shadow p-8 grow">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">Ingredients</h3>
-            <ul className="list-disc pl-6 space-y-2">
+        <div className="w-5/12 grow rounded-xl bg-violet-100 p-8 shadow">
+            <h3 className="mb-4 text-2xl font-bold text-gray-800">
+                Ingredients
+            </h3>
+            <ul className="list-disc space-y-2 pl-6">
                 {recipe.ingredients?.map((i) => (
                     <li key={i.id} className="text-xl">
-                        <span className="text-gray-700 font-semibold mr-2">
+                        <span className="mr-2 font-semibold text-gray-700">
                             {i.quantity ? `${i.quantity} ${i.name}` : i.name}
                         </span>
                         <span className="text-gray-500">{i.comment}</span>

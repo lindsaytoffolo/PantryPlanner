@@ -1,32 +1,56 @@
 "use client";
 
-import React, { useActionState, useRef, useState, useTransition } from "react";
-import ImageUploader from "./image-uploader";
+import { RecipeFormState, updateRecipe } from "@/app/lib/actions";
+import { Ingredient, Recipe } from "@/app/lib/definitions";
+import { Button } from "@/app/ui/button";
+import FormLabel from "@/app/ui/form-label";
+import ImageUploader from "@/app/ui/image-uploader";
 import Input from "@/app/ui/input";
 import TextArea from "@/app/ui/text-area";
-import { RecipeFormState, createRecipe } from "@/app/lib/actions";
-import { Button } from "@/app/ui/button";
-import { Ingredient } from "@/app/lib/definitions";
-import { XMarkIcon, PlusCircleIcon } from "@heroicons/react/24/outline";
-import FormLabel from "@/app/ui/form-label";
+import { PlusCircleIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import React, { useActionState, useState, useTransition } from "react";
 
-const CreateRecipeForm: React.FC = () => {
+type EditRecipeFormProps = {
+    recipe: Recipe;
+};
+const EditRecipeForm: React.FC<EditRecipeFormProps> = ({ recipe }) => {
     const [image, setImage] = useState<File | null>(null);
-    const [previewImage, setPreviewImage] = useState<string | undefined>();
-    const [ingredients, setIngredients] = useState<Ingredient[]>([
-        { name: "", quantity: "", comment: "" },
-    ]);
-    const [instructions, setInstructions] = useState<string[]>([""]);
+    const [previewImage, setPreviewImage] = useState<string | undefined>(
+        recipe.image,
+    );
+    const startingIngredients = recipe.ingredients?.length
+        ? recipe.ingredients
+        : [{ name: "", quantity: "", comment: "" }];
+    const [ingredients, setIngredients] =
+        useState<Ingredient[]>(startingIngredients);
+    const startingInstructions = recipe.instructions?.length
+        ? recipe.instructions.map((i) => i.instruction)
+        : [""];
+    const [instructions, setInstructions] =
+        useState<string[]>(startingInstructions);
     const initialState: RecipeFormState = { message: null, errors: {} };
-    const [state, formAction, isSubmitting] = useActionState(createRecipe, initialState);
+    const updateRecipeWithId = updateRecipe.bind(null, recipe.id);
+    const [state, formAction, isSubmitting] = useActionState(
+        updateRecipeWithId,
+        initialState,
+    );
     const [_, startTransition] = useTransition();
 
-    const handleIngredientChange = (index: number, field: keyof Ingredient, value: string) => {
-        setIngredients((prev) => prev.toSpliced(index, 1, { ...prev[index], [field]: value }));
+    const handleIngredientChange = (
+        index: number,
+        field: keyof Ingredient,
+        value: string,
+    ) => {
+        setIngredients((prev) =>
+            prev.toSpliced(index, 1, { ...prev[index], [field]: value }),
+        );
     };
 
     const addIngredient = () => {
-        setIngredients((prev) => [...prev, { name: "", quantity: "", comment: "" }]);
+        setIngredients((prev) => [
+            ...prev,
+            { name: "", quantity: "", comment: "" },
+        ]);
     };
 
     const removeIngredient = (index: number) => {
@@ -56,11 +80,17 @@ const CreateRecipeForm: React.FC = () => {
     };
 
     return (
-        <div className="container mt-8 bg-white rounded-lg p-6">
+        <div className="container mt-8 rounded-lg bg-white p-6">
             <form onSubmit={handleSubmit} className="space-y-4">
-                <Input label="Title" id="title" errors={state.errors?.title} required />
+                <Input
+                    label="Title"
+                    id="title"
+                    errors={state.errors?.title}
+                    required
+                    defaultValue={recipe.title}
+                />
                 <div className="flex gap-4">
-                    <div className="grow flex flex-col">
+                    <div className="flex grow flex-col">
                         <FormLabel label="Image" required />
                         <ImageUploader
                             setImage={setImage}
@@ -78,6 +108,7 @@ const CreateRecipeForm: React.FC = () => {
                             min={0}
                             errors={state.errors?.servings}
                             required
+                            defaultValue={recipe.servings}
                         />
                         <FormLabel className="mt-4" label="Prep Time" />
                         <div className="flex gap-4">
@@ -88,6 +119,7 @@ const CreateRecipeForm: React.FC = () => {
                                 type="number"
                                 min={0}
                                 errors={state.errors?.prep_time_hours}
+                                defaultValue={recipe.prep_time_hours}
                             />
                             <Input
                                 className="grow"
@@ -96,6 +128,7 @@ const CreateRecipeForm: React.FC = () => {
                                 type="number"
                                 min={0}
                                 errors={state.errors?.prep_time_minutes}
+                                defaultValue={recipe.prep_time_minutes}
                             />
                         </div>
                         <FormLabel className="mt-4" label="Cook Time" />
@@ -107,6 +140,7 @@ const CreateRecipeForm: React.FC = () => {
                                 type="number"
                                 min={0}
                                 errors={state.errors?.cook_time_hours}
+                                defaultValue={recipe.cook_time_hours}
                             />
                             <Input
                                 className="grow"
@@ -115,6 +149,7 @@ const CreateRecipeForm: React.FC = () => {
                                 type="number"
                                 min={0}
                                 errors={state.errors?.cook_time_minutes}
+                                defaultValue={recipe.cook_time_minutes}
                             />
                         </div>
                     </div>
@@ -125,20 +160,28 @@ const CreateRecipeForm: React.FC = () => {
                     rows={3}
                     maxLength={500}
                     errors={state.errors?.description}
+                    defaultValue={recipe.description}
                 />
 
                 <div>
                     <FormLabel className="mb-0.5" label="Ingredients" />
                     {ingredients.map((ingredient, index) => (
-                        <div key={index} className="flex items-center gap-2 mb-2">
-                            <div className="flex-grow flex gap-2">
+                        <div
+                            key={index}
+                            className="mb-2 flex items-center gap-2"
+                        >
+                            <div className="flex flex-grow gap-2">
                                 <Input
                                     className="grow"
                                     placeholder="Quantity (ie. 2 cups)"
                                     id={`ingredient_quantity_${index}`}
                                     value={ingredient.quantity}
                                     onChange={(e) =>
-                                        handleIngredientChange(index, "quantity", e.target.value)
+                                        handleIngredientChange(
+                                            index,
+                                            "quantity",
+                                            e.target.value,
+                                        )
                                     }
                                 />
                                 <Input
@@ -147,7 +190,11 @@ const CreateRecipeForm: React.FC = () => {
                                     id={`ingredient_name_${index}`}
                                     value={ingredient.name}
                                     onChange={(e) =>
-                                        handleIngredientChange(index, "name", e.target.value)
+                                        handleIngredientChange(
+                                            index,
+                                            "name",
+                                            e.target.value,
+                                        )
                                     }
                                     required
                                 />
@@ -157,19 +204,23 @@ const CreateRecipeForm: React.FC = () => {
                                     id={`ingredient_comment_${index}`}
                                     value={ingredient.comment}
                                     onChange={(e) =>
-                                        handleIngredientChange(index, "comment", e.target.value)
+                                        handleIngredientChange(
+                                            index,
+                                            "comment",
+                                            e.target.value,
+                                        )
                                     }
                                     rows={1}
                                 />
                             </div>
                             <XMarkIcon
                                 onClick={() => removeIngredient(index)}
-                                className="cursor-pointer w-6 text-gray-500 hover:text-violet-900"
+                                className="w-6 cursor-pointer text-gray-500 hover:text-violet-900"
                             />
                         </div>
                     ))}
                     <Button variant="text" onClick={addIngredient}>
-                        <PlusCircleIcon className="w-6 stroke-2 mr-1" />
+                        <PlusCircleIcon className="mr-1 w-6 stroke-2" />
                         Add Ingredient
                     </Button>
                 </div>
@@ -177,34 +228,46 @@ const CreateRecipeForm: React.FC = () => {
                 <div>
                     <FormLabel className="mb-0.5" label="Instructions" />
                     {instructions.map((instruction, index) => (
-                        <div key={index} className="flex items-center gap-2 mb-2">
+                        <div
+                            key={index}
+                            className="mb-2 flex items-center gap-2"
+                        >
                             <div className="flex-grow">
                                 <TextArea
                                     placeholder={`Step ${index + 1}`}
                                     id={`instruction_${index}`}
                                     value={instruction}
-                                    onChange={(e) => handleInstructionChange(index, e.target.value)}
+                                    onChange={(e) =>
+                                        handleInstructionChange(
+                                            index,
+                                            e.target.value,
+                                        )
+                                    }
                                     required
                                 />
                             </div>
                             <XMarkIcon
                                 onClick={() => removeInstruction(index)}
-                                className="cursor-pointer w-6 text-gray-500 hover:text-violet-900"
+                                className="w-6 cursor-pointer text-gray-500 hover:text-violet-900"
                             />
                         </div>
                     ))}
                     <Button variant="text" onClick={addInstruction}>
-                        <PlusCircleIcon className="w-6 stroke-2 mr-1" />
+                        <PlusCircleIcon className="mr-1 w-6 stroke-2" />
                         Add Step
                     </Button>
                 </div>
 
-                <Button className="ml-auto" type="submit" loading={isSubmitting}>
-                    Create Recipe
+                <Button
+                    className="ml-auto"
+                    type="submit"
+                    loading={isSubmitting}
+                >
+                    Update Recipe
                 </Button>
             </form>
         </div>
     );
 };
 
-export default CreateRecipeForm;
+export default EditRecipeForm;

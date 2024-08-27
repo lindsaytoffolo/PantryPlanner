@@ -30,7 +30,7 @@ const TextArea: React.FC<TextAreaProps> = ({
             <textarea
                 id={id}
                 name={id}
-                className="w-full text-gray-900 appearance-none border-0 p-2 rounded-lg focus:outline-none focus:ring-0"
+                className="w-full appearance-none rounded-lg border-0 p-2 text-gray-900 focus:outline-none focus:ring-0"
                 defaultValue={defaultValue}
                 {...textareaProps}
             />

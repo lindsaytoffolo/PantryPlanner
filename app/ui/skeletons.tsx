@@ -9,7 +9,7 @@ export function CardSkeleton({ className }: { className?: string }) {
         <div
             className={classNames(
                 `${shimmer} relative overflow-hidden rounded-xl bg-gray-100 p-2 shadow-sm`,
-                className
+                className,
             )}
         >
             <div className="flex p-4">
@@ -26,14 +26,14 @@ export function CardSkeleton({ className }: { className?: string }) {
 export function RecipeCardSkeleton() {
     return (
         <div
-            className={`${shimmer} relative overflow-hidden rounded-xl bg-gray-100 p-6 shadow-sm flex flex-col items-between justify-between`}
+            className={`${shimmer} items-between relative flex flex-col justify-between overflow-hidden rounded-xl bg-gray-100 p-6 shadow-sm`}
         >
             <div className="h-8 w-48 rounded-full bg-gray-200 text-sm font-medium" />
             <div className="flex flex-col gap-2">
-                <div className="h-6 w-48 mt-auto rounded-md bg-gray-200 text-sm font-medium" />
+                <div className="mt-auto h-6 w-48 rounded-md bg-gray-200 text-sm font-medium" />
                 <div className="h-4 w-full rounded-md bg-gray-200" />
                 <div className="h-4 w-full rounded-md bg-gray-200" />
-                <div className="h-5 w-32 ml-auto rounded-md bg-gray-200 text-sm font-medium self-end" />
+                <div className="ml-auto h-5 w-32 self-end rounded-md bg-gray-200 text-sm font-medium" />
             </div>
         </div>
     );
@@ -42,10 +42,10 @@ export function RecipeCardSkeleton() {
 export function RecipeSummarySkeleton() {
     return (
         <div
-            className={`${shimmer} relative overflow-hidden rounded-xl bg-gray-100 p-6 shadow-sm row-span-2`}
+            className={`${shimmer} relative row-span-2 overflow-hidden rounded-xl bg-gray-100 p-6 shadow-sm`}
         >
-            <div className="h-6 w-48 mb-4 rounded-md bg-gray-200 text-sm font-medium" />
-            <div className="flex h-[calc(100%-80px)] flex-col gap-4 items-center justify-center rounded-xl bg-white px-4 py-8">
+            <div className="mb-4 h-6 w-48 rounded-md bg-gray-200 text-sm font-medium" />
+            <div className="flex h-[calc(100%-80px)] flex-col items-center justify-center gap-4 rounded-xl bg-white px-4 py-8">
                 <div className="h-5 w-full rounded-md bg-gray-200" />
                 <div className="h-5 w-full rounded-md bg-gray-200" />
                 <div className="h-5 w-full rounded-md bg-gray-200" />
@@ -58,7 +58,7 @@ export function RecipeSummarySkeleton() {
                 <div className="h-5 w-full rounded-md bg-gray-200" />
                 <div className="h-5 w-full rounded-md bg-gray-200" />
             </div>
-            <div className="h-6 w-48 mt-4 ml-auto rounded-md bg-gray-200 text-sm font-medium self-end" />
+            <div className="ml-auto mt-4 h-6 w-48 self-end rounded-md bg-gray-200 text-sm font-medium" />
         </div>
     );
 }
@@ -76,7 +76,9 @@ export function CardsSkeleton() {
 
 export function RevenueChartSkeleton() {
     return (
-        <div className={`${shimmer} relative w-full overflow-hidden md:col-span-4`}>
+        <div
+            className={`${shimmer} relative w-full overflow-hidden md:col-span-4`}
+        >
             <div className="mb-4 h-8 w-36 rounded-md bg-gray-100" />
             <div className="rounded-xl bg-gray-100 p-4">
                 <div className="mt-0 grid h-[410px] grid-cols-12 items-end gap-2 rounded-md bg-white p-4 sm:grid-cols-13 md:gap-4" />
@@ -106,7 +108,9 @@ export function InvoiceSkeleton() {
 
 export function LatestInvoicesSkeleton() {
     return (
-        <div className={`${shimmer} relative flex w-full flex-col overflow-hidden md:col-span-4`}>
+        <div
+            className={`${shimmer} relative flex w-full flex-col overflow-hidden md:col-span-4`}
+        >
             <div className="mb-4 h-8 w-36 rounded-md bg-gray-100" />
             <div className="flex grow flex-col justify-between rounded-xl bg-gray-100 p-4">
                 <div className="bg-white px-6">
@@ -151,7 +155,7 @@ export function HomeSkeleton() {
             <div
                 className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
             />
-            <div className="grid grid-cols-2 grid-rows-2 grid-flow-col gap-4 h-[calc(100vh-148px)] max-w-[800px] mx-auto">
+            <div className="mx-auto grid h-[calc(100vh-148px)] max-w-[800px] grid-flow-col grid-cols-2 grid-rows-2 gap-4">
                 <RecipeCardSkeleton />
                 <RecipeCardSkeleton />
                 <RecipeSummarySkeleton />
@@ -237,22 +241,40 @@ export function InvoicesTableSkeleton() {
                     <table className="hidden min-w-full text-gray-900 md:table">
                         <thead className="rounded-lg text-left text-sm font-normal">
                             <tr>
-                                <th scope="col" className="px-4 py-5 font-medium sm:pl-6">
+                                <th
+                                    scope="col"
+                                    className="px-4 py-5 font-medium sm:pl-6"
+                                >
                                     Customer
                                 </th>
-                                <th scope="col" className="px-3 py-5 font-medium">
+                                <th
+                                    scope="col"
+                                    className="px-3 py-5 font-medium"
+                                >
                                     Email
                                 </th>
-                                <th scope="col" className="px-3 py-5 font-medium">
+                                <th
+                                    scope="col"
+                                    className="px-3 py-5 font-medium"
+                                >
                                     Amount
                                 </th>
-                                <th scope="col" className="px-3 py-5 font-medium">
+                                <th
+                                    scope="col"
+                                    className="px-3 py-5 font-medium"
+                                >
                                     Date
                                 </th>
-                                <th scope="col" className="px-3 py-5 font-medium">
+                                <th
+                                    scope="col"
+                                    className="px-3 py-5 font-medium"
+                                >
                                     Status
                                 </th>
-                                <th scope="col" className="relative pb-4 pl-3 pr-6 pt-2 sm:pr-6">
+                                <th
+                                    scope="col"
+                                    className="relative pb-4 pl-3 pr-6 pt-2 sm:pr-6"
+                                >
                                     <span className="sr-only">Edit</span>
                                 </th>
                             </tr>

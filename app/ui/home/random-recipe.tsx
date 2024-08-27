@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { fetchRandomRecipe } from "@/app/lib/data";
+import Image from "next/image";
 import HomeCard from "./home-card";
 
 export default async function RandomRecipe() {
@@ -8,7 +8,7 @@ export default async function RandomRecipe() {
     return (
         <HomeCard
             href={`/recipes/${recipe.id}`}
-            className="relative overflow-hidden rounded-xl shadow-lg p-0"
+            className="relative overflow-hidden rounded-xl p-0 shadow-lg"
         >
             <div className="relative h-full w-full">
                 {recipe.image && (
@@ -23,15 +23,21 @@ export default async function RandomRecipe() {
                 )}
             </div>
 
-            <div className="absolute text-left inset-0 flex flex-col p-6 text-white justify-between bg-gradient-to-t from-black/80 to-transparent">
-                <div className="absolute top-4 left-4 bg-white text-black text-base px-4 py-1 rounded-full font-medium">
+            <div className="absolute inset-0 flex flex-col justify-between bg-gradient-to-t from-black/80 to-transparent p-6 text-left text-white">
+                <div className="absolute left-4 top-4 rounded-full bg-white px-4 py-1 text-base font-medium text-black">
                     Recipe Spotlight
                 </div>
 
-                <h2 className="text-2xl font-bold mb-1 mt-auto">{recipe.title}</h2>
-                <div className="text-sm line-clamp-3 italic">{recipe.description}</div>
-                <div className="flex justify-end mt-1">
-                    <span className="underline underline-offset-4">View recipe</span>
+                <h2 className="mb-1 mt-auto text-2xl font-bold">
+                    {recipe.title}
+                </h2>
+                <div className="line-clamp-3 text-sm italic">
+                    {recipe.description}
+                </div>
+                <div className="mt-1 flex justify-end">
+                    <span className="underline underline-offset-4">
+                        View recipe
+                    </span>
                 </div>
             </div>
         </HomeCard>

@@ -1,12 +1,9 @@
 "use client";
 
-import { fetchInvoicesPages, fetchRecipes } from "@/app/lib/data";
-import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/app/ui/button";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { fetchRecipes } from "@/app/lib/data";
 import { Recipe } from "@/app/lib/definitions";
+import { Metadata } from "next";
+import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import RecipeCard from "./recipe-card";
 
@@ -21,7 +18,10 @@ type RecipesGridProps = {
 
 const NUMBER_OF_RESCIPES_TO_FETCH = 9;
 
-export default function RecipesGrid({ initialRecipes, query }: RecipesGridProps) {
+export default function RecipesGrid({
+    initialRecipes,
+    query,
+}: RecipesGridProps) {
     const [offset, setOffset] = useState(NUMBER_OF_RESCIPES_TO_FETCH);
     const [recipes, setRecipes] = useState<Recipe[]>(initialRecipes);
     const [hasMoreData, setHasMoreData] = useState(true);
@@ -35,7 +35,11 @@ export default function RecipesGrid({ initialRecipes, query }: RecipesGridProps)
 
     const loadMoreRecipes = async () => {
         if (hasMoreData) {
-            const apiRecipes = await fetchRecipes(offset, NUMBER_OF_RESCIPES_TO_FETCH, query);
+            const apiRecipes = await fetchRecipes(
+                offset,
+                NUMBER_OF_RESCIPES_TO_FETCH,
+                query,
+            );
 
             if (apiRecipes.length == 0) {
                 setHasMoreData(false);

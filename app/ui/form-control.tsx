@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import FormLabel from "./form-label";
 import { classNames } from "../lib/utils";
+import FormLabel from "./form-label";
 
 type FormControlProps = {
     className?: string;
@@ -23,11 +23,13 @@ const FormControl: React.FC<FormControlProps> = ({
 }) => {
     return (
         <div className="flex-1">
-            {label && <FormLabel htmlFor={id} label={label} required={required} />}
+            {label && (
+                <FormLabel htmlFor={id} label={label} required={required} />
+            )}
             <div
                 className={classNames(
-                    "flex w-full bg-transparent rounded-lg border border-gray-300 hover:border-gray-500 focus-within:border-violet-900 shadow-custom-input",
-                    className
+                    "flex w-full rounded-lg border border-gray-300 bg-transparent shadow-custom-input focus-within:border-violet-900 hover:border-gray-500",
+                    className,
                 )}
             >
                 {children}

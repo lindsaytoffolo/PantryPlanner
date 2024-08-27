@@ -15,9 +15,16 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, query }) => {
     const getMatch = () => {
         if (!query) {
             return;
-        } else if (recipe.match_source === "description" && recipe.description) {
+        } else if (
+            recipe.match_source === "description" &&
+            recipe.description
+        ) {
             const snippetLength = 50;
-            const snippet = getSnippet(recipe.description, query, snippetLength);
+            const snippet = getSnippet(
+                recipe.description,
+                query,
+                snippetLength,
+            );
             return reactStringReplace(snippet, query, (match, i) => (
                 <span key={i} className="font-bold text-white">
                     {match}
@@ -27,7 +34,9 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, query }) => {
             return (
                 <>
                     Ingredient list contains:{" "}
-                    <span className="font-bold text-white">{recipe.ingredient_match}</span>
+                    <span className="font-bold text-white">
+                        {recipe.ingredient_match}
+                    </span>
                 </>
             );
         }
@@ -35,26 +44,30 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, query }) => {
     const matchComponent = getMatch();
 
     return (
-        <div className="relative h-56 bg-cover bg-center rounded-lg overflow-hidden shadow-lg">
+        <div className="relative h-56 overflow-hidden rounded-lg bg-cover bg-center shadow-lg">
             <div className="absolute inset-0">
                 {recipe.image && !recipe.image.includes("example") && (
                     <Image
                         src={recipe.image}
                         alt={recipe.title}
-                        className="w-full h-full object-cover"
+                        className="h-full w-full object-cover"
                         width={200}
                         height={200}
                     />
                 )}
             </div>
 
-            <div className="relative p-6 flex flex-col justify-between h-full bg-gradient-to-t from-black/80 to-transparent">
-                <h2 className="text-2xl font-bold text-white mb-1 mt-auto">{recipe.title}</h2>
+            <div className="relative flex h-full flex-col justify-between bg-gradient-to-t from-black/80 to-transparent p-6">
+                <h2 className="mb-1 mt-auto text-2xl font-bold text-white">
+                    {recipe.title}
+                </h2>
                 {matchComponent && (
-                    <div className="text-xs text-gray-50 italic">{matchComponent}</div>
+                    <div className="text-xs italic text-gray-50">
+                        {matchComponent}
+                    </div>
                 )}
 
-                <div className="flex justify-end mt-1">
+                <div className="mt-1 flex justify-end">
                     <Link
                         className="text-white underline underline-offset-4"
                         href={`/recipes/${recipe.id}`}

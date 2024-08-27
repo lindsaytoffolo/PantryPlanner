@@ -1,9 +1,9 @@
 "use client";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import FormControl from "./form-control";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useDebouncedCallback from "../hooks/useDebouncedCallback";
+import FormControl from "./form-control";
 
 export default function Search({ placeholder }: { placeholder: string }) {
     const searchParams = useSearchParams();
@@ -22,9 +22,9 @@ export default function Search({ placeholder }: { placeholder: string }) {
 
     return (
         <FormControl className="flex flex-1 flex-shrink-0 bg-white" id="search">
-            <MagnifyingGlassIcon className="w-5 ml-2" />
+            <MagnifyingGlassIcon className="ml-2 w-5" />
             <input
-                className="w-full text-gray-800 appearance-none border-0 p-2 rounded-lg focus:outline-none focus:ring-0"
+                className="w-full appearance-none rounded-lg border-0 p-2 text-gray-800 focus:outline-none focus:ring-0"
                 placeholder={placeholder}
                 onChange={(e) => handleSearch(e.target.value)}
                 defaultValue={searchParams.get("query")?.toString()}

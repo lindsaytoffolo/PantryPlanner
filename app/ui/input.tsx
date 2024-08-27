@@ -29,12 +29,16 @@ const Input: React.FC<InputProps> = ({
             errors={errors}
             required={required}
         >
-            {unit && <span className="flex items-center my-2 ml-2 text-gray-400">{unit}</span>}
+            {unit && (
+                <span className="my-2 ml-2 flex items-center text-gray-400">
+                    {unit}
+                </span>
+            )}
             <input
                 type="text"
                 id={id}
                 name={id}
-                className="w-full text-gray-800 appearance-none border-0 p-2 rounded-lg focus:outline-none focus:ring-0"
+                className="w-full appearance-none rounded-lg border-0 p-2 text-gray-800 focus:outline-none focus:ring-0"
                 defaultValue={defaultValue}
                 aria-describedby={`${id}-error`}
                 {...inputProps}

@@ -1,22 +1,36 @@
 "use client";
 
-import React, { useActionState } from "react";
-import Modal, { ModalProps } from "./modal";
+import {
+    GroceryItemFormState,
+    deleteGroceryItem,
+    updateGroceryItem,
+} from "@/app/lib/actions";
 import { GroceryItem } from "@/app/lib/definitions";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/app/ui/button";
-import { GroceryItemFormState, deleteGroceryItem, updateGroceryItem } from "@/app/lib/actions";
-import TextArea from "@/app/ui/text-area";
 import Input from "@/app/ui/input";
+import Modal, { ModalProps } from "@/app/ui/modal";
+import TextArea from "@/app/ui/text-area";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import React, { useActionState } from "react";
 
 interface EditItemModalProps extends Omit<ModalProps, "children"> {
     groceryItem?: GroceryItem;
 }
 
-const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, groceryItem }) => {
+const EditItemModal: React.FC<EditItemModalProps> = ({
+    isOpen,
+    onClose,
+    groceryItem,
+}) => {
     const initialState: GroceryItemFormState = { message: null, errors: {} };
-    const updateGroceryItemWithId = updateGroceryItem.bind(null, groceryItem?.id!);
-    const [state, formAction] = useActionState(updateGroceryItemWithId, initialState);
+    const updateGroceryItemWithId = updateGroceryItem.bind(
+        null,
+        groceryItem?.id!,
+    );
+    const [state, formAction] = useActionState(
+        updateGroceryItemWithId,
+        initialState,
+    );
 
     if (!groceryItem) return null;
 
@@ -33,7 +47,7 @@ const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, groceryI
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
-            <div className="flex justify-center h-14 w-14 items-center mx-auto mb-4">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center">
                 {groceryItem.image ? (
                     <img
                         className="max-h-14 max-w-14"
@@ -68,10 +82,10 @@ const EditItemModal: React.FC<EditItemModalProps> = ({ isOpen, onClose, groceryI
 
                 <div className="mt-6 flex justify-between">
                     <Button
-                        className="bg-red-600 hover:bg-red-800 active:bg-red-800 focus-visible:outline-red-400"
+                        className="bg-red-600 hover:bg-red-800 focus-visible:outline-red-400 active:bg-red-800"
                         onClick={() => deleteGroceryItem(groceryItem.id!)}
                     >
-                        <TrashIcon className="w-5 text-white mr-1" />
+                        <TrashIcon className="mr-1 w-5 text-white" />
                         Delete
                     </Button>
                     <Button type="submit">Save</Button>

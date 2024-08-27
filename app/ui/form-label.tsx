@@ -19,8 +19,8 @@ const FormLabel: React.FC<FormLabelProps> = ({
             {...labelProps}
             className={classNames(
                 "block text-sm font-medium text-gray-700",
-                required && 'after:content-["*"] after:text-red-500 after:ml-1',
-                className
+                required && 'after:ml-1 after:text-red-500 after:content-["*"]',
+                className,
             )}
         >
             {label}

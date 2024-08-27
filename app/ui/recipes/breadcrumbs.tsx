@@ -7,7 +7,11 @@ interface Breadcrumb {
     active?: boolean;
 }
 
-export default function Breadcrumbs({ breadcrumbs }: { breadcrumbs: Breadcrumb[] }) {
+export default function Breadcrumbs({
+    breadcrumbs,
+}: {
+    breadcrumbs: Breadcrumb[];
+}) {
     return (
         <nav aria-label="Breadcrumb" className="mb-6 block">
             <ol className="flex text-xl md:text-2xl">
@@ -16,7 +20,9 @@ export default function Breadcrumbs({ breadcrumbs }: { breadcrumbs: Breadcrumb[]
                         key={breadcrumb.href}
                         aria-current={breadcrumb.active}
                         className={classNames(
-                            breadcrumb.active ? "text-gray-900" : "text-gray-500"
+                            breadcrumb.active
+                                ? "text-gray-900"
+                                : "text-gray-500",
                         )}
                     >
                         <Link href={breadcrumb.href}>{breadcrumb.label}</Link>

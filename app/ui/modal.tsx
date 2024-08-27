@@ -1,8 +1,8 @@
 "use client";
 
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import React, { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { XMarkIcon } from "@heroicons/react/24/outline";
 
 export interface ModalProps {
     isOpen: boolean;
@@ -21,7 +21,9 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         };
     }, [isOpen]);
 
-    const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const handleOverlayClick = (
+        e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    ) => {
         if (e.target === e.currentTarget) {
             onClose();
         }
@@ -33,16 +35,16 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
         <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
             onClick={handleOverlayClick}
         >
             <div
-                className="relative p-8 mx-auto bg-white rounded-xl shadow-lg w-[500px]"
+                className="relative mx-auto w-[500px] rounded-xl bg-white p-8 shadow-lg"
                 role="document"
             >
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-900"
+                    className="absolute right-4 top-4 text-gray-600 hover:text-gray-900"
                     aria-label="Close modal"
                 >
                     <XMarkIcon className="w-6 stroke-2 text-neutral-500" />
@@ -50,7 +52,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
                 {children}
             </div>
         </div>,
-        document.body
+        document.body,
     );
 };
 

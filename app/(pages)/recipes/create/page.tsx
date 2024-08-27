@@ -1,6 +1,6 @@
+import Breadcrumbs from "@/app/ui/recipes/breadcrumbs";
+import CreateRecipeForm from "@/app/ui/recipes/create-recipe-form";
 import { Metadata } from "next";
-import CreateRecipeForm from "./create-recipe-form";
-import Breadcrumbs from "@/app/ui/invoices/breadcrumbs";
 
 export const metadata: Metadata = {
     title: "Create Recipe",
@@ -19,7 +19,7 @@ export default async function Page() {
                     },
                 ]}
             />
-            <div className="w-full max-w-[700px] mx-auto mt-8">
+            <div className="mx-auto mt-8 w-full max-w-[700px]">
                 <CreateRecipeForm />
             </div>
         </main>

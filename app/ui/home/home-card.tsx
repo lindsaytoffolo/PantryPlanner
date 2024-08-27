@@ -1,6 +1,6 @@
-import React from "react";
-import Link from "next/link";
 import { classNames } from "@/app/lib/utils";
+import Link from "next/link";
+import React from "react";
 
 interface HomeCardProps {
     href: string;
@@ -13,11 +13,11 @@ const HomeCard: React.FC<HomeCardProps> = ({ href, className, children }) => {
         <Link
             href={href}
             className={classNames(
-                "bg-gray-100 rounded-lg shadow-lg overflow-hidden transition-transform p-6 transform hover:scale-105 focus:outline-none",
-                className
+                "transform overflow-hidden rounded-lg bg-gray-100 p-6 shadow-lg transition-transform hover:scale-105 focus:outline-none",
+                className,
             )}
         >
-            <div className="flex flex-col items-center justify-center h-full text-center">
+            <div className="flex h-full flex-col items-center justify-center text-center">
                 {children}
             </div>
         </Link>

@@ -1,7 +1,6 @@
-import "@/app/ui/global.css";
 import { defaultFont } from "@/app/ui/fonts";
+import "@/app/ui/global.css";
 import { Metadata } from "next";
-import SideNav from "@/app/ui/dashboard/sidenav";
 
 export const metadata: Metadata = {
     title: {
@@ -13,10 +12,16 @@ export const metadata: Metadata = {
     metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+    children,
+}: {
+    children: React.ReactNode;
+}) {
     return (
         <html lang="en">
-            <body className={`${defaultFont.className} antialiased bg-neutral-100`}>
+            <body
+                className={`${defaultFont.className} bg-neutral-100 antialiased`}
+            >
                 {children}
             </body>
         </html>

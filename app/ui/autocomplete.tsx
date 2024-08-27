@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useDebouncedCallback } from "use-debounce";
-import { PlusIcon, PencilIcon } from "@heroicons/react/24/outline";
-import { createGroceryItem, nutritionixFoodSearch } from "../lib/actions";
+import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import useDebouncedCallback from "../hooks/useDebouncedCallback";
+import { nutritionixFoodSearch } from "../lib/actions";
 import { GroceryItem } from "../lib/definitions";
 
 type NutritionixInstantResult = {
@@ -22,11 +22,15 @@ const FoodItem = ({ foodName, foodImage, onClick }: FoodItemProps) => {
     return (
         <li
             onClick={onClick}
-            className="p-2 cursor-pointer border-t border-gray-300 hover:bg-gray-100 flex items-center"
+            className="flex cursor-pointer items-center border-t border-gray-300 p-2 hover:bg-gray-100"
         >
-            <div className="w-8 mr-3 flex items-center justify-center">
+            <div className="mr-3 flex w-8 items-center justify-center">
                 {foodImage ? (
-                    <img className="max-h-8 max-w-8" alt={foodName} src={foodImage} />
+                    <img
+                        className="max-h-8 max-w-8"
+                        alt={foodName}
+                        src={foodImage}
+                    />
                 ) : (
                     <PencilIcon className="w-6" />
                 )}
@@ -41,7 +45,9 @@ type AutocompleteProps = {
 };
 const Autocomplete: React.FC<AutocompleteProps> = ({ onAdd }) => {
     const [inputValue, setInputValue] = useState<string>("");
-    const [suggestions, setSuggestions] = useState<NutritionixInstantResult[]>([]);
+    const [suggestions, setSuggestions] = useState<NutritionixInstantResult[]>(
+        [],
+    );
     const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
 
     const updateOptions = async (query: string) => {
@@ -50,7 +56,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ onAdd }) => {
         const filteredOptions = options.reduce(
             (
                 acc: { seen: Set<string>; items: NutritionixInstantResult[] },
-                item: NutritionixInstantResult
+                item: NutritionixInstantResult,
             ) => {
                 if (!acc.seen.has(item.tag_id)) {
                     acc.seen.add(item.tag_id);
@@ -58,7 +64,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ onAdd }) => {
                 }
                 return acc;
             },
-            { seen: new Set(), items: [] }
+            { seen: new Set(), items: [] },
         ).items;
         setSuggestions(filteredOptions);
     };
@@ -98,26 +104,28 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ onAdd }) => {
     }, []);
 
     return (
-        <div className="relative autocomplete w-full">
+        <div className="autocomplete relative w-full">
             <div className="flex items-center">
                 <span className="absolute left-2">
-                    <PlusIcon className="text-violet-900 w-6 stroke-2" />
+                    <PlusIcon className="w-6 stroke-2 text-violet-900" />
                 </span>
                 <input
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}
-                    className="border p-2 w-full rounded-xl pl-10 focus:border-violet-900 border-gray-300 border-1"
+                    className="border-1 w-full rounded-xl border border-gray-300 p-2 pl-10 focus:border-violet-900"
                     placeholder="Add item"
                     onFocus={() => setIsDropdownVisible(true)}
                 />
             </div>
             {isDropdownVisible && suggestions.length > 0 && (
-                <ul className="absolute z-10 w-full border border-gray-300 bg-white rounded mt-1 max-h-60 overflow-auto p-2">
+                <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded border border-gray-300 bg-white p-2">
                     {inputValue && (
                         <FoodItem
                             foodName={inputValue}
-                            onClick={() => handleSuggestionClick({ name: inputValue })}
+                            onClick={() =>
+                                handleSuggestionClick({ name: inputValue })
+                            }
                         />
                     )}
                     {suggestions.map((suggestion, index) => (

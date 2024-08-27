@@ -1,5 +1,5 @@
-import Logo from "@/app/ui/logo";
 import LoginForm from "@/app/ui/login-form";
+import Logo from "@/app/ui/logo";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

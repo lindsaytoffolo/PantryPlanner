@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/app/ui/button";
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface ImageUploaderProps {
@@ -37,7 +37,9 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0] as File;
-        setPreviewImage((oldImage) => (file ? URL.createObjectURL(file) : oldImage));
+        setPreviewImage((oldImage) =>
+            file ? URL.createObjectURL(file) : oldImage,
+        );
         file && setImage(file);
     };
 
@@ -51,12 +53,12 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
     };
 
     return (
-        <div className="h-full flex flex-col">
+        <div className="flex h-full flex-col">
             <div
                 className={twMerge(
-                    "grow w-72 relative flex items-center justify-center border border-gray-300 hover:border-gray-500 focus:border-violet-900 shadow-custom-input rounded-lg",
+                    "relative flex w-72 grow items-center justify-center rounded-lg border border-gray-300 shadow-custom-input hover:border-gray-500 focus:border-violet-900",
                     isDragging ? "bg-gray-100" : "bg-white",
-                    !previewImage && "border-dashed cursor-pointer"
+                    !previewImage && "cursor-pointer border-dashed",
                 )}
                 onClick={previewImage ? undefined : handleClick}
                 onDrop={handleDrop}
@@ -64,21 +66,21 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
                 onDragLeave={handleDragLeave}
             >
                 {previewImage ? (
-                    <div className="relative w-full h-full overflow-hidden">
+                    <div className="relative h-full w-full overflow-hidden">
                         <img
                             src={previewImage}
                             alt="Preview"
-                            className="absolute inset-0 w-full h-full object-cover rounded-lg"
+                            className="absolute inset-0 h-full w-full rounded-lg object-cover"
                         />
                         <Button
                             onClick={handleClick}
-                            className="absolute bottom-2 right-2 bg-gray-100 text-black border-gray-300 border rounded-lg focus:outline-none active:bg-gray-300 hover:bg-gray-300"
+                            className="absolute bottom-2 right-2 rounded-lg border border-gray-300 bg-gray-100 text-black hover:bg-gray-300 focus:outline-none active:bg-gray-300"
                         >
                             Change image
                         </Button>
                     </div>
                 ) : (
-                    <div className="text-gray-400 p-4 text-center">
+                    <div className="p-4 text-center text-gray-400">
                         Drag and drop an image here, or click to select one
                     </div>
                 )}
