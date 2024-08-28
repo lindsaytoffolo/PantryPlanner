@@ -2,14 +2,9 @@
 
 import { fetchRecipes } from "@/app/lib/data";
 import { Recipe } from "@/app/lib/definitions";
-import { Metadata } from "next";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import RecipeCard from "./recipe-card";
-
-export const metadata: Metadata = {
-    title: "Recipes",
-};
 
 type RecipesGridProps = {
     initialRecipes: Recipe[];

@@ -13,7 +13,7 @@ export default async function Page() {
     const groceryItems = await fetchGroceryItems(groceryListId);
 
     return (
-        <div className="mx-auto mt-8 w-full max-w-[700px]">
+        <div className="mx-auto w-full max-w-[700px] md:mt-8">
             <div className="flex w-full items-center justify-between">
                 <h1 className="text-3xl">Grocery List</h1>
             </div>
