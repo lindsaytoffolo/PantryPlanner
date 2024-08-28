@@ -68,7 +68,7 @@ const CreateRecipeForm: React.FC = () => {
     };
 
     return (
-        <div className="container mt-8 rounded-lg bg-white p-6">
+        <div className="container mt-8 rounded-lg bg-white p-4 md:p-6">
             <form onSubmit={handleSubmit} className="space-y-4">
                 <Input
                     label="Title"

@@ -42,7 +42,7 @@ export default async function RandomRecipe() {
                 <h2 className="mb-1 mt-auto text-2xl font-bold">
                     {recipe.title}
                 </h2>
-                <div className="line-clamp-3 text-sm italic">
+                <div className="line-clamp-2 text-sm italic md:line-clamp-3">
                     {recipe.description}
                 </div>
 
