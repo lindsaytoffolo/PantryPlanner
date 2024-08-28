@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import useDebouncedCallback from "../hooks/useDebouncedCallback";
 import { nutritionixFoodSearch } from "../lib/actions";
 import { GroceryItem } from "../lib/definitions";
+import FormControl from "./form-control";
 
 type NutritionixInstantResult = {
     food_name: string;
@@ -40,10 +41,12 @@ const FoodItem = ({ foodName, foodImage, onClick }: FoodItemProps) => {
     );
 };
 
-type AutocompleteProps = {
+type IngredientAutocompleteProps = {
     onAdd: (newItem: GroceryItem) => void;
 };
-const Autocomplete: React.FC<AutocompleteProps> = ({ onAdd }) => {
+const IngredientAutocomplete: React.FC<IngredientAutocompleteProps> = ({
+    onAdd,
+}) => {
     const [inputValue, setInputValue] = useState<string>("");
     const [suggestions, setSuggestions] = useState<NutritionixInstantResult[]>(
         [],
@@ -104,21 +107,22 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ onAdd }) => {
     }, []);
 
     return (
-        <div className="autocomplete relative w-full">
-            <div className="flex items-center">
-                <span className="absolute left-2">
-                    <PlusIcon className="w-6 stroke-2 text-violet-900" />
-                </span>
+        <div className="relative w-full">
+            <FormControl
+                className="flex flex-1 flex-shrink-0 bg-white"
+                id="autocomplete"
+            >
+                <PlusIcon className="ml-2 w-6 stroke-2 text-violet-900" />
                 <input
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}
-                    className="border-1 w-full rounded-xl border border-gray-300 p-2 pl-10 focus:border-violet-900"
+                    className="w-full appearance-none rounded-lg border-0 p-2 text-gray-800 focus:outline-none focus:ring-0"
                     placeholder="Add item"
                     onFocus={() => setIsDropdownVisible(true)}
                 />
-            </div>
-            {isDropdownVisible && suggestions.length > 0 && (
+            </FormControl>
+            {isDropdownVisible && (inputValue || suggestions.length > 0) && (
                 <ul className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded border border-gray-300 bg-white p-2">
                     {inputValue && (
                         <FoodItem
@@ -147,4 +151,4 @@ const Autocomplete: React.FC<AutocompleteProps> = ({ onAdd }) => {
     );
 };
 
-export default Autocomplete;
+export default IngredientAutocomplete;

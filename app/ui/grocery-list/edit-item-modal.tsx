@@ -45,6 +45,11 @@ const EditItemModal: React.FC<EditItemModalProps> = ({
         }
     };
 
+    const onDelete = async () => {
+        deleteGroceryItem(groceryItem.id!);
+        onClose();
+    };
+
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center">
@@ -83,7 +88,7 @@ const EditItemModal: React.FC<EditItemModalProps> = ({
                 <div className="mt-6 flex justify-between">
                     <Button
                         className="bg-red-600 hover:bg-red-800 focus-visible:outline-red-400 active:bg-red-800"
-                        onClick={() => deleteGroceryItem(groceryItem.id!)}
+                        onClick={onDelete}
                     >
                         <TrashIcon className="mr-1 w-5 text-white" />
                         Delete

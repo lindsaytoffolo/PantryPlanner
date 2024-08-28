@@ -1,4 +1,5 @@
 import { fetchGroceryItems, fetchGroceryLists } from "@/app/lib/data";
+import { CheckIcon } from "@heroicons/react/24/outline";
 import { notFound } from "next/navigation";
 import HomeCard from "./home-card";
 
@@ -19,11 +20,19 @@ export default async function GrocerySummary() {
             <ul className="h-full w-full list-disc space-y-2 overflow-y-scroll rounded-lg bg-white p-4 pl-8 text-left text-gray-800">
                 {groceryItems.map((item) => (
                     <li key={item.id} className="text-lg">
-                        <span className="mr-2 font-medium">
-                            {item.quantity
-                                ? `${item.quantity} ${item.name}`
-                                : item.name}
-                        </span>
+                        <div className="flex items-center">
+                            <span className="mr-2 font-medium">
+                                {item.name}
+                            </span>
+                            {item.quantity && (
+                                <span className="mr-2 mt-0.5 text-sm text-gray-600">
+                                    {item.quantity}
+                                </span>
+                            )}
+                            {item.checked && (
+                                <CheckIcon className="w-4 stroke-[3] text-violet-600" />
+                            )}
+                        </div>
                     </li>
                 ))}
             </ul>
