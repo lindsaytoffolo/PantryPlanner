@@ -19,7 +19,7 @@ export default async function RandomRecipe() {
     return (
         <HomeCard
             href={`/recipes/${recipe.id}`}
-            className="relative overflow-hidden rounded-xl p-0 shadow-lg"
+            className="relative overflow-hidden rounded-xl p-0 shadow-lg md:p-0"
         >
             <div className="relative h-full w-full">
                 {recipe.image && (
