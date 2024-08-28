@@ -1,17 +1,14 @@
 "use client";
 
 import { classNames } from "@/app/lib/utils";
-import {
-    CakeIcon,
-    HomeIcon,
-    ShoppingCartIcon,
-} from "@heroicons/react/24/outline";
+import { HomeIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import RecipeIcon from "./recipe-icon";
 
 const links = [
     { name: "Home", href: "/home", icon: HomeIcon },
-    { name: "Recipes", href: "/recipes", icon: CakeIcon },
+    { name: "Recipes", href: "/recipes", icon: RecipeIcon },
     { name: "Grocery List", href: "/grocery-list", icon: ShoppingCartIcon },
 ];
 

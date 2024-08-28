@@ -89,7 +89,7 @@ const EditRecipeForm: React.FC<EditRecipeFormProps> = ({ recipe }) => {
                     required
                     defaultValue={recipe.title}
                 />
-                <div className="flex gap-4">
+                <div className="flex flex-col gap-4 md:flex-row">
                     <div className="flex grow flex-col">
                         <FormLabel label="Image" required />
                         <ImageUploader
@@ -163,14 +163,14 @@ const EditRecipeForm: React.FC<EditRecipeFormProps> = ({ recipe }) => {
                     defaultValue={recipe.description}
                 />
 
-                <div>
+                <div className="flex flex-col gap-4 md:gap-2">
                     <FormLabel className="mb-0.5" label="Ingredients" />
                     {ingredients.map((ingredient, index) => (
                         <div
                             key={index}
                             className="mb-2 flex items-center gap-2"
                         >
-                            <div className="flex flex-grow gap-2">
+                            <div className="flex flex-grow flex-col gap-2 md:flex-row">
                                 <Input
                                     className="grow"
                                     placeholder="Quantity (ie. 2 cups)"

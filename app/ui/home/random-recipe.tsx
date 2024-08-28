@@ -1,9 +1,20 @@
 import { fetchRandomRecipe } from "@/app/lib/data";
+import { formatTime } from "@/app/lib/utils";
+import { ClockIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import HomeCard from "./home-card";
 
 export default async function RandomRecipe() {
     const recipe = await fetchRandomRecipe();
+
+    let totalMinutes =
+        (recipe.prep_time_minutes || 0) + (recipe.cook_time_minutes || 0);
+    let totalHours =
+        (recipe.prep_time_hours || 0) + (recipe.cook_time_hours || 0);
+    if (totalMinutes >= 60) {
+        totalMinutes -= 60;
+        totalHours += 1;
+    }
 
     return (
         <HomeCard
@@ -34,7 +45,12 @@ export default async function RandomRecipe() {
                 <div className="line-clamp-3 text-sm italic">
                     {recipe.description}
                 </div>
-                <div className="mt-1 flex justify-end">
+
+                <div className="mt-1 flex justify-between">
+                    <div className="flex">
+                        <ClockIcon className="mr-1 w-5" />
+                        {formatTime(totalHours, totalMinutes)}
+                    </div>
                     <span className="underline underline-offset-4">
                         View recipe
                     </span>

@@ -31,10 +31,15 @@ export default async function Page({
                 ]}
             />
 
-            <div className="mb-8 flex items-center justify-between gap-2">
-                <Search placeholder="Find recipes by title, description, or ingredients..." />
-                <Link className="flex justify-end" href="/recipes/create">
-                    <Button>Create Recipe</Button>
+            <div className="mb-8 flex flex-col items-center justify-between gap-2 md:flex-row">
+                <Search placeholder="Search by title, description, or ingredients..." />
+                <Link
+                    className="flex w-full justify-end md:w-auto"
+                    href="/recipes/create"
+                >
+                    <Button className="w-full justify-center md:w-auto">
+                        Create Recipe
+                    </Button>
                 </Link>
             </div>
 

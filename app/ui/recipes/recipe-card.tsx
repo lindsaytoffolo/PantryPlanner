@@ -1,7 +1,8 @@
 "use client";
 
 import { Recipe } from "@/app/lib/definitions";
-import { getSnippet } from "@/app/lib/utils";
+import { formatTime, getSnippet } from "@/app/lib/utils";
+import { ClockIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import reactStringReplace from "react-string-replace";
@@ -19,7 +20,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, query }) => {
             recipe.match_source === "description" &&
             recipe.description
         ) {
-            const snippetLength = 50;
+            const snippetLength = 80;
             const snippet = getSnippet(
                 recipe.description,
                 query,
@@ -42,6 +43,15 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, query }) => {
         }
     };
     const matchComponent = getMatch();
+
+    let totalMinutes =
+        (recipe.prep_time_minutes || 0) + (recipe.cook_time_minutes || 0);
+    let totalHours =
+        (recipe.prep_time_hours || 0) + (recipe.cook_time_hours || 0);
+    if (totalMinutes >= 60) {
+        totalMinutes -= 60;
+        totalHours += 1;
+    }
 
     return (
         <div className="relative h-56 overflow-hidden rounded-lg bg-cover bg-center shadow-lg">
@@ -67,9 +77,13 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ recipe, query }) => {
                     </div>
                 )}
 
-                <div className="mt-1 flex justify-end">
+                <div className="mt-1 flex justify-between text-white">
+                    <div className="flex">
+                        <ClockIcon className="mr-1 w-5" />
+                        {formatTime(totalHours, totalMinutes)}
+                    </div>
                     <Link
-                        className="text-white underline underline-offset-4"
+                        className="underline underline-offset-4"
                         href={`/recipes/${recipe.id}`}
                     >
                         View Recipe

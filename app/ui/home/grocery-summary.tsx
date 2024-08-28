@@ -11,12 +11,12 @@ export default async function GrocerySummary() {
     return (
         <HomeCard
             href="/grocery-list"
-            className="row-span-2 bg-violet-900 text-white"
+            className="row-span-2 bg-violet-900 px-6 text-white"
         >
             <h3 className="mb-4 self-start text-2xl font-medium">
                 Grocery List
             </h3>
-            <ul className="h-full list-disc space-y-2 overflow-y-scroll rounded-lg bg-white p-4 pl-8 text-left text-gray-800">
+            <ul className="h-full w-full list-disc space-y-2 overflow-y-scroll rounded-lg bg-white p-4 pl-8 text-left text-gray-800">
                 {groceryItems.map((item) => (
                     <li key={item.id} className="text-lg">
                         <span className="mr-2 font-medium">
@@ -24,7 +24,6 @@ export default async function GrocerySummary() {
                                 ? `${item.quantity} ${item.name}`
                                 : item.name}
                         </span>
-                        <span className="text-gray-50">{item.comment}</span>
                     </li>
                 ))}
             </ul>

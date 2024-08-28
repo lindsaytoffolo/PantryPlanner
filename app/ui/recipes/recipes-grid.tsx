@@ -52,15 +52,27 @@ export default function RecipesGrid({
 
     return (
         <>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 {recipes?.map((recipe) => (
                     <RecipeCard key={recipe.id} recipe={recipe} query={query} />
                 ))}
             </div>
             <div className="mt-8">
                 {(hasMoreData && <div ref={scrollTrigger}>Loading...</div>) || (
-                    <p className="...">No more recipes to load</p>
+                    <p>No more recipes to load</p>
                 )}
+            </div>
+            <div className="mt-8 text-xs text-gray-500">
+                <p>
+                    Disclaimer: The recipes and images featured on this website
+                    are sourced from HelloFresh, and all associated rights and
+                    trademarks are owned by HelloFresh. I do not own the content
+                    but have manually entered details for personal use only.
+                    This website is intended solely for personal, non-commercial
+                    purposes. I am not affiliated with HelloFresh, and the
+                    accuracy and suitability of the content are not guaranteed.
+                    For any questions or concerns, please contact me directly.
+                </p>
             </div>
         </>
     );

@@ -56,7 +56,7 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({
         <div className="flex h-full flex-col">
             <div
                 className={twMerge(
-                    "relative flex w-72 grow items-center justify-center rounded-lg border border-gray-300 shadow-custom-input hover:border-gray-500 focus:border-violet-900",
+                    "relative flex h-44 w-72 grow items-center justify-center rounded-lg border border-gray-300 shadow-custom-input hover:border-gray-500 focus:border-violet-900 md:h-auto",
                     isDragging ? "bg-gray-100" : "bg-white",
                     !previewImage && "cursor-pointer border-dashed",
                 )}

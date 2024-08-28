@@ -2,7 +2,7 @@ import { Recipe } from "@/app/lib/definitions";
 
 const RecipeIngredients = ({ recipe }: { recipe: Recipe }) => {
     return (
-        <div className="w-5/12 grow rounded-xl bg-violet-100 p-8 shadow">
+        <div className="w-full grow rounded-xl bg-violet-100 p-4 shadow md:w-5/12 md:p-8">
             <h3 className="mb-4 text-2xl font-bold text-gray-800">
                 Ingredients
             </h3>

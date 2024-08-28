@@ -31,8 +31,17 @@ export function getSnippet(longString: string, query: string, maxSnippetLength: 
   const snippetEnd = `${longString} `.lastIndexOf(' ', roughEnd)
 
   let snippet = longString.slice(snippetStart, snippetEnd);
-  if (snippetStart > 0) snippet = '...' + snippet;
-  if (snippetEnd < longString.length) snippet += '...';
+  if (snippetStart > 0) snippet = '... ' + snippet;
+  if (snippetEnd < longString.length) snippet += ' ...';
 
   return snippet;
 }
+
+export const formatTime = (hours?: number, minutes?: number) => {
+  if (hours && minutes) {
+    return `${hours}h ${minutes}mins`;
+  } else if (hours) {
+    return `${hours}h`;
+  }
+  return `${minutes}mins`;
+};

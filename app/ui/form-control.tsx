@@ -22,13 +22,13 @@ const FormControl: React.FC<FormControlProps> = ({
     children,
 }) => {
     return (
-        <div className="flex-1">
+        <div className="w-full flex-1 md:w-auto">
             {label && (
                 <FormLabel htmlFor={id} label={label} required={required} />
             )}
             <div
                 className={classNames(
-                    "flex w-full rounded-lg border border-gray-300 bg-transparent shadow-custom-input focus-within:border-violet-900 hover:border-gray-500",
+                    "flex w-full rounded-lg border border-gray-300 bg-transparent shadow-custom-input focus-within:border-gray-500 hover:border-gray-500",
                     className,
                 )}
             >

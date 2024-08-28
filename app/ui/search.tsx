@@ -24,7 +24,7 @@ export default function Search({ placeholder }: { placeholder: string }) {
         <FormControl className="flex flex-1 flex-shrink-0 bg-white" id="search">
             <MagnifyingGlassIcon className="ml-2 w-5" />
             <input
-                className="w-full appearance-none rounded-lg border-0 p-2 text-gray-800 focus:outline-none focus:ring-0"
+                className="w-full appearance-none rounded-lg border-0 p-2 text-gray-800 placeholder:text-sm focus:outline-none focus:ring-0 md:placeholder:text-base"
                 placeholder={placeholder}
                 onChange={(e) => handleSearch(e.target.value)}
                 defaultValue={searchParams.get("query")?.toString()}

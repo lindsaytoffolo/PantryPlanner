@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { id: string } }) {
                 ]}
             />
             <RecipeHeader recipe={recipe} />
-            <div className="mt-5 flex gap-5">
+            <div className="mt-5 flex flex-col gap-5 md:flex-row">
                 <RecipeIngredients recipe={recipe} />
                 <RecipeInstructions recipe={recipe} />
             </div>
