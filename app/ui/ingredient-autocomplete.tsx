@@ -82,7 +82,7 @@ const IngredientAutocomplete: React.FC<IngredientAutocompleteProps> = ({
 
     useEffect(() => {
         fetchSuggestions(inputValue);
-    }, [inputValue, fetchSuggestions]);
+    }, [inputValue]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
@@ -114,7 +114,6 @@ const IngredientAutocomplete: React.FC<IngredientAutocompleteProps> = ({
             >
                 <PlusIcon className="ml-2 w-6 stroke-2 text-violet-900" />
                 <input
-                    type="text"
                     value={inputValue}
                     onChange={handleInputChange}
                     className="w-full appearance-none rounded-lg border-0 p-2 text-gray-800 focus:outline-none focus:ring-0"
