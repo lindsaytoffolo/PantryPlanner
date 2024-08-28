@@ -16,8 +16,8 @@ export default function Page() {
                         planning, featuring an intuitive system to organize your
                         favorite recipes and a user-friendly grocery list
                         manager. Whether you're planning your weekly meals or
-                        keeping track of your shopping, PantryPlanner simplifies
-                        your food planning, making it a breeze.
+                        keeping track of your shopping, PantryPlanner ensures
+                        that food planning is easy and enjoyable.
                     </p>
                     <Link
                         href="/login"
