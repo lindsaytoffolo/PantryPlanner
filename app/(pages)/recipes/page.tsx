@@ -20,7 +20,6 @@ export default async function Page({
     };
 }) {
     const query = searchParams?.query || "";
-
     const recipes = await fetchRecipes(0, INITIAL_NUMBER_OF_RECIPES, query);
 
     return (

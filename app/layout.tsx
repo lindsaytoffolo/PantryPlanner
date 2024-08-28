@@ -9,7 +9,6 @@ export const metadata: Metadata = {
     },
     description:
         "PantryPlanner is an app that helps you manage both your recipe book and your grocery list to make meal planning easier",
-    metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
 };
 
 export default function RootLayout({
