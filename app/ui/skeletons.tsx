@@ -1,7 +1,7 @@
 const shimmer =
     "before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent";
 
-function RandomRecipeSkeleton() {
+export function RandomRecipeSkeleton() {
     return (
         <div
             className={`${shimmer} items-between relative flex flex-col justify-between overflow-hidden rounded-xl bg-gray-100 p-6 shadow-sm`}
@@ -28,7 +28,7 @@ function CreateRecipeSkeleton() {
     );
 }
 
-function RecipeSummarySkeleton() {
+export function RecipeSummarySkeleton() {
     return (
         <div
             className={`${shimmer} relative row-span-2 overflow-hidden rounded-xl bg-gray-200 p-6 shadow-sm`}
