@@ -3,7 +3,7 @@
 **Project Description:** PantryPlanner is designed to simplify meal planning by combining an intuitive system to organize your favorite recipes and a user-friendly grocery list manager. Whether you're planning your weekly meals or
 keeping track of your shopping, PantryPlanner ensures that food planning is easy and enjoyable.
 
-**The login page has test credentials autofilled to allow anyone to explore the app. Currently, there is no fully developed onboarding flow available.**
+The app can be viewed at https://recipe-book-liart.vercel.app/. **The login page has test credentials autofilled to allow anyone to explore the app. Currently, there is no fully developed onboarding flow available.**
 
 ![PantryPlanner Screenshot](app/opengraph-image.png)
 
