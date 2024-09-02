@@ -176,6 +176,7 @@ export async function updateGroceryItem(
     }
 
     revalidatePath('/grocery-list');
+    redirect('/grocery-list');
 }
 
 
