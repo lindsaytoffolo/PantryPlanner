@@ -93,7 +93,7 @@ export const nutritionixFoodSearch = async (query: string) => {
 
 export async function createGroceryItem(name: string, image?: string) {
     try {
-        const r = await sql`
+        await sql`
             INSERT INTO grocery_items (grocery_list_id, name, image, checked)
             VALUES (${GROCERY_LIST_ID}, ${name}, ${image}, ${false})
         `;
@@ -108,7 +108,7 @@ export async function createGroceryItem(name: string, image?: string) {
 export async function toggleGroceryItem(id: string, checked: boolean) {
 
     try {
-        const r = await sql`
+        await sql`
             UPDATE grocery_items
             SET checked = ${checked}
             WHERE id = ${id}
@@ -118,7 +118,6 @@ export async function toggleGroceryItem(id: string, checked: boolean) {
     }
 
     revalidatePath('/grocery-list');
-    redirect('/grocery-list');
 }
 
 export async function updateGroceryListOrder(newItems: GroceryItem[]) {
@@ -138,13 +137,12 @@ export async function updateGroceryListOrder(newItems: GroceryItem[]) {
 
         const ids = newItems.map(item => item.id);
         const orders = newItems.map(item => item.sort_order);
-        const r = await sql.query(query, [...ids, ...orders]);
+        await sql.query(query, [...ids, ...orders]);
     } catch (error) {
         return { message: 'Database Error: Failed to Update Grocery List.' };
     }
 
     revalidatePath('/grocery-list');
-    redirect('/grocery-list');
 }
 
 export async function updateGroceryItem(
@@ -178,7 +176,6 @@ export async function updateGroceryItem(
     }
 
     revalidatePath('/grocery-list');
-    redirect('/grocery-list');
 }
 
 
